@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inclusive UX copy, Inclusive Cross-Platform Patterns</title>
+  <meta name="description" content="Identify exclusive verbs and assumptions in interface copy and provide an inclusive-substitution glossary.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <p class="eyebrow">Pattern 03 &middot; Design</p>
+    <h1>Inclusive UX copy</h1>
+    <p class="subhead">Identify exclusive verbs and assumptions in interface copy and substitute toward language that doesn&rsquo;t pre-select an audience.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <aside class="draft-banner" role="status">
+      <p><strong>Draft.</strong> Visual examples and copy review pending. Pattern logic and WCAG mapping are scaffolded; ready for Young&rsquo;s pass.</p>
+    </aside>
+
+    <section aria-labelledby="problem-heading">
+      <h2 id="problem-heading">Problem</h2>
+      <p>UX copy carries assumptions about its reader. Sense-specific verbs (&ldquo;watch this video&rdquo;) signal that the reader is a sighted, hearing user. Gendered defaults (&ldquo;guys&rdquo;, &ldquo;his/her&rdquo;) signal a binary audience. Violent or war metaphors (&ldquo;kill the process&rdquo;, &ldquo;hit a target&rdquo;) signal a particular cultural register. Idioms with cultural lift (&ldquo;low-hanging fruit&rdquo;) silently exclude non-native speakers and translators.</p>
+      <p>None of these are accessibility violations in the WCAG sense, but they signal who is and isn&rsquo;t addressed. A screen-reader user who hears &ldquo;watch this video&rdquo; may skip past a piece of content that, mechanically, would have worked for them.</p>
+    </section>
+
+    <section aria-labelledby="pattern-heading">
+      <h2 id="pattern-heading">Pattern</h2>
+      <p>Audit each piece of UI copy against five categories. Build a project-specific substitution glossary, version-controlled with the codebase.</p>
+      <ol>
+        <li><strong>Sense-specific verbs.</strong> &ldquo;Watch&rdquo; &rarr; &ldquo;play&rdquo;. &ldquo;See&rdquo; &rarr; &ldquo;view&rdquo; only when neutral; otherwise reword. &ldquo;Hear&rdquo; &rarr; &ldquo;listen&rdquo;. &ldquo;Look at&rdquo; &rarr; reword.</li>
+        <li><strong>Gendered defaults.</strong> &ldquo;Guys&rdquo; &rarr; &ldquo;everyone&rdquo;, &ldquo;folks&rdquo;, &ldquo;people&rdquo;. &ldquo;His/her&rdquo; &rarr; singular &ldquo;their&rdquo;. Avoid title prefixes (Mr./Mrs.) unless legally required.</li>
+        <li><strong>Violent / war metaphors.</strong> &ldquo;Kill the process&rdquo; &rarr; &ldquo;stop the process&rdquo;. &ldquo;Hit a target&rdquo; &rarr; &ldquo;reach a target&rdquo;. &ldquo;Pull the trigger&rdquo; &rarr; &ldquo;commit&rdquo; or &ldquo;confirm&rdquo;.</li>
+        <li><strong>Mental-health metaphors.</strong> &ldquo;OCD about&rdquo;, &ldquo;schizophrenic UI&rdquo;, &ldquo;crazy fast&rdquo;, drop entirely; reword for what was actually meant.</li>
+        <li><strong>Culturally-specific idioms.</strong> Replace with literal language. &ldquo;Low-hanging fruit&rdquo; &rarr; &ldquo;easy wins&rdquo;. &ldquo;Drink the Kool-Aid&rdquo; &rarr; &ldquo;adopt the approach&rdquo;.</li>
+      </ol>
+      <p>The substitutions aren&rsquo;t about purity, they&rsquo;re about precision. &ldquo;Play&rdquo; describes the actual button function (it triggers playback whether the user watches or listens). &ldquo;Stop the process&rdquo; describes the actual outcome.</p>
+    </section>
+
+    <section aria-labelledby="examples-heading">
+      <h2 id="examples-heading">Visual examples</h2>
+      <div class="example-stack">
+        <div class="demo-row">
+          <div class="demo-tile demo-image demo-fail">
+            <span class="demo-label">Before</span>
+            <img src="assets/before-watch.png" alt="A video play button overlaid on a chair photograph, labeled &lsquo;Watch video.&rsquo;">
+            <span class="demo-ratio">&ldquo;Watch video&rdquo;</span>
+          </div>
+          <div class="demo-tile demo-image demo-pass">
+            <span class="demo-label">After</span>
+            <img src="assets/after-play.png" alt="The same video play button on the same chair photograph, relabeled &lsquo;Play video.&rsquo;">
+            <span class="demo-ratio">&ldquo;Play video&rdquo;</span>
+          </div>
+        </div>
+        <figure class="example-figure">
+          <img src="assets/audit-panel.png" alt="An in-design UX-copy audit panel that flags the verb &lsquo;Watch&rsquo; and suggests &lsquo;Play&rsquo; as the inclusive substitution, with a category label.">
+          <figcaption>Inline audit: exclusive verbs in the design are flagged in context, with the substitution and category surfaced alongside.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section aria-labelledby="code-heading">
+      <h2 id="code-heading">Code</h2>
+      <p>Most of this pattern is content, not code. The few touchpoints in markup are <code>aria-label</code> values for icon-only controls and visually-hidden link labels.</p>
+      <pre><code>&lt;!-- Before: assumes the user watches --&gt;
+&lt;button&gt;Watch the demo&lt;/button&gt;
+
+&lt;!-- After: describes the action, not the sense --&gt;
+&lt;button&gt;Play the demo&lt;/button&gt;
+
+&lt;!-- Icon-only play control: aria-label uses the inclusive verb --&gt;
+&lt;button aria-label="Play the demo"&gt;
+  &lt;svg aria-hidden="true" focusable="false"&gt;...&lt;/svg&gt;
+&lt;/button&gt;</code></pre>
+    </section>
+
+    <section aria-labelledby="annotation-heading">
+      <h2 id="annotation-heading">Annotation</h2>
+      <p>In design files, mark exclusive copy with strikethrough plus the canonical substitution and the category. The category trains the team over time.</p>
+      <pre><code>Watch this video  [strikethrough]
+↓ Play this video
+Category: sense-specific verb</code></pre>
+    </section>
+
+    <section aria-labelledby="wcag-heading">
+      <h2 id="wcag-heading">WCAG mapping</h2>
+      <ul class="criteria-list">
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/labels-or-instructions.html" target="_blank" rel="noopener noreferrer">3.3.2 Labels or Instructions<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+         clear, unambiguous labels
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/reading-level.html" target="_blank" rel="noopener noreferrer">3.1.5 Reading Level<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">AAA</span>
+         supplemental content for above-lower-secondary reading level
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="related-heading">
+      <h2 id="related-heading">Related patterns</h2>
+      <ul>
+        <li>Inclusive imagery (#04), image content that doesn&rsquo;t encode the same kind of audience assumptions</li>
+        <li>Inclusive identity forms (#05), copy patterns specifically for gender, name, and pronoun fields</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="reading-heading">
+      <h2 id="reading-heading">Further reading</h2>
+      <ul>
+        <li><a href="https://content-guide.18f.gov/our-style/inclusive-language/" target="_blank" rel="noopener noreferrer">18F Content Guide, Inclusive language<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.gov.uk/guidance/content-design/writing-for-gov-uk" target="_blank" rel="noopener noreferrer">GOV.UK content design<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://inclusive.microsoft.design/" target="_blank" rel="noopener noreferrer">Microsoft Inclusive Design Toolkit<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://consciousstyleguide.com/" target="_blank" rel="noopener noreferrer">Conscious Style Guide<span class="sr-only"> (opens in new tab)</span></a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="../../">&larr; All patterns</a></p>
+    <p>Hub: <a href="https://ykimoh.github.io" target="_blank" rel="noopener noreferrer">ykimoh.github.io<span class="sr-only"> (opens in new tab)</span></a> &middot; Source: <a href="https://github.com/ykimoh/inclusive-cross-platform-patterns" target="_blank" rel="noopener noreferrer">github.com/ykimoh/inclusive-cross-platform-patterns<span class="sr-only"> (opens in new tab)</span></a></p>
+    <p>Last updated: 2026</p>
+  </footer>
+</body>
+</html>

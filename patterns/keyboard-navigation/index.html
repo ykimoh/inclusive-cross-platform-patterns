@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Focus order &amp; keyboard navigation annotation, Inclusive Cross-Platform Patterns</title>
+  <meta name="description" content="How to annotate keyboard tab order, focus-trap regions, and skip-link placement on a design file so engineers implement them correctly.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <p class="eyebrow">Pattern 06 &middot; Annotate</p>
+    <h1>Focus order &amp; keyboard navigation annotation</h1>
+    <p class="subhead">Annotate the design with the focus path, focus-trap regions, and skip-link placement so engineers implement keyboard navigation correctly the first time.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <aside class="draft-banner" role="status">
+      <p><strong>Draft.</strong> Visual examples and copy review pending. Pattern logic and WCAG mapping are scaffolded; ready for Young&rsquo;s pass.</p>
+    </aside>
+
+    <section aria-labelledby="problem-heading">
+      <h2 id="problem-heading">Problem</h2>
+      <p>Mouse users can click anywhere; keyboard users tab through DOM order. When DOM order doesn&rsquo;t match the visual reading order, keyboard navigation lands users in unexpected places, the cart icon before the product list, the footer before the &ldquo;continue&rdquo; button. Custom widgets without keyboard handlers are unreachable. Modals without focus traps and Esc-to-close strand users mid-flow.</p>
+      <p>Engineers can&rsquo;t infer the intended focus order from a visual mockup alone, especially for complex layouts where DOM order may need to differ from visual order to support both keyboard and mouse use.</p>
+    </section>
+
+    <section aria-labelledby="pattern-heading">
+      <h2 id="pattern-heading">Pattern</h2>
+      <ul>
+        <li><strong>Numbered focus path.</strong> Annotate each interactive element on the design with a sequence number matching the intended tab order. The numbers are the spec; engineers wire DOM and <code>tabindex</code> to match.</li>
+        <li><strong>Skip-to-content link.</strong> First focusable element on every page. Visible on focus only; lands focus on <code>#main</code>.</li>
+        <li><strong>Focus-trap regions.</strong> Modal dialogs, custom comboboxes, drawer overlays. Mark the trap boundary, name the close action, and specify Esc-to-close.</li>
+        <li><strong>Focus indicators.</strong> Every interactive element has a visible focus indicator with at least 3:1 contrast against the page surface and 2px minimum width. Never <code>outline: none</code> without a replacement.</li>
+        <li><strong>Roving tabindex.</strong> For composite widgets (toolbars, listboxes, radio groups), one tab stop per widget; arrow keys move within. Annotate which key moves where.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="examples-heading">
+      <h2 id="examples-heading">Visual examples</h2>
+      <p><em>Visual examples (a design with the numbered focus path overlaid, plus a modal dialog with focus-trap boundary marked) will be added during pattern review.</em></p>
+    </section>
+
+    <section aria-labelledby="code-heading">
+      <h2 id="code-heading">Code</h2>
+      <p>The annotated focus path translates to plain DOM order plus <code>:focus-visible</code> styling. Avoid positive <code>tabindex</code> values; use semantic source order.</p>
+      <pre><code>&lt;!-- Skip link: first focusable, visible on focus only --&gt;
+&lt;a class="skip-link" href="#main"&gt;Skip to main content&lt;/a&gt;
+
+&lt;!-- Main is a focus target after skip --&gt;
+&lt;main id="main" tabindex="-1"&gt;
+  ...
+&lt;/main&gt;</code></pre>
+      <pre><code>/* Focus indicator: 2px solid, 3:1 contrast against the surface */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* Skip link: off-screen until focused */
+.skip-link {
+  position: absolute;
+  top: -3rem;
+  left: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--accent);
+  color: #fff;
+  z-index: 100;
+}
+.skip-link:focus { top: 1rem; }</code></pre>
+    </section>
+
+    <section aria-labelledby="annotation-heading">
+      <h2 id="annotation-heading">Annotation</h2>
+      <p>On the design, place a numbered circle next to each interactive element (1, 2, 3 &hellip;). For focus-trap regions, draw a boundary box with the trap label and close-action note. Document non-default key bindings (Esc, arrow keys for composite widgets).</p>
+      <pre><code>Focus path: 1 → 2 → 3 → 4 (skip link, primary nav, search, main CTA)
+Focus trap: Modal "Add to cart"
+Trap close: Esc, click backdrop, X button (all return focus to invoking button)</code></pre>
+    </section>
+
+    <section aria-labelledby="wcag-heading">
+      <h2 id="wcag-heading">WCAG mapping</h2>
+      <ul class="criteria-list">
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html" target="_blank" rel="noopener noreferrer">2.1.1 Keyboard<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+         all functionality available from a keyboard
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/no-keyboard-trap.html" target="_blank" rel="noopener noreferrer">2.1.2 No Keyboard Trap<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+         focus can move away from any region
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/focus-order.html" target="_blank" rel="noopener noreferrer">2.4.3 Focus Order<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+         focus order preserves meaning and operability
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/focus-visible.html" target="_blank" rel="noopener noreferrer">2.4.7 Focus Visible<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">AA</span>
+         the focused element is always visible
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="related-heading">
+      <h2 id="related-heading">Related patterns</h2>
+      <ul>
+        <li>Structure landmarks annotation (#07), landmark roles enable bypass-block navigation alongside the focus path</li>
+        <li>Accessibility-mode validation walkthrough (#09), verifies the annotated focus order survives interaction</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="reading-heading">
+      <h2 id="reading-heading">Further reading</h2>
+      <ul>
+        <li><a href="https://www.w3.org/WAI/ARIA/apg/" target="_blank" rel="noopener noreferrer">WAI-ARIA Authoring Practices<span class="sr-only"> (opens in new tab)</span></a>, canonical keyboard interaction patterns</li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets" target="_blank" rel="noopener noreferrer">MDN: keyboard-navigable widgets<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.a11yproject.com/posts/how-to-use-the-tabindex-attribute/" target="_blank" rel="noopener noreferrer">A11y Project: tabindex<span class="sr-only"> (opens in new tab)</span></a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="../../">&larr; All patterns</a></p>
+    <p>Hub: <a href="https://ykimoh.github.io" target="_blank" rel="noopener noreferrer">ykimoh.github.io<span class="sr-only"> (opens in new tab)</span></a> &middot; Source: <a href="https://github.com/ykimoh/inclusive-cross-platform-patterns" target="_blank" rel="noopener noreferrer">github.com/ykimoh/inclusive-cross-platform-patterns<span class="sr-only"> (opens in new tab)</span></a></p>
+    <p>Last updated: 2026</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accessibility-mode validation walkthrough, Inclusive Cross-Platform Patterns</title>
+  <meta name="description" content="A repeatable, designer-runnable pre-handoff check: walk the design with keyboard + VoiceOver/NVDA to surface focus traps, missing labels, and broken landmark order before engineering.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <p class="eyebrow">Pattern 09 &middot; Validate</p>
+    <h1>Accessibility-mode validation walkthrough</h1>
+    <p class="subhead">A repeatable pre-handoff check that surfaces focus traps, missing labels, and reflow failures before engineering picks up the design.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <aside class="draft-banner" role="status">
+      <p><strong>Draft.</strong> Visual examples and copy review pending. Pattern logic and WCAG mapping are scaffolded; ready for Young&rsquo;s pass.</p>
+    </aside>
+
+    <section aria-labelledby="problem-heading">
+      <h2 id="problem-heading">Problem</h2>
+      <p>Designs pass annotation review on paper but fail in interaction. Keyboard traps emerge in dynamic UI (a modal whose close button isn&rsquo;t focusable from inside the modal). Focus rings get hidden by overlays. Screen-reader announcement order mangles meaning when DOM order doesn&rsquo;t match visual order. The design-time annotation audit doesn&rsquo;t surface these, only an interaction pass does.</p>
+      <p>Engineers can run accessibility tooling (axe, WAVE), but the failures that matter most happen <em>before</em> code: in the design&rsquo;s expected interaction model. A designer-runnable check during the design phase catches them earliest and cheapest.</p>
+    </section>
+
+    <section aria-labelledby="pattern-heading">
+      <h2 id="pattern-heading">Pattern</h2>
+      <p>Three checks, run on the prototyped or built design before handoff. Document the pass/fail of each in the design review.</p>
+      <ol>
+        <li><strong>Keyboard-only check.</strong> Unplug the mouse. Tab through the page. Verify every interactive element is reachable. Verify the focus ring is visible at every step (3:1 minimum contrast against the page surface). Verify Esc closes every dismissable surface (modal, menu, tooltip). Verify focus returns to the invoking element after a modal closes.</li>
+        <li><strong>Screen-reader pass.</strong> Turn on VoiceOver (Cmd+F5 on macOS) or NVDA (free, Windows). Navigate by heading (Ctrl-Opt-Cmd-H / H), by landmark (Ctrl-Opt-U / D), and by tab. Verify announcement order matches the intended reading order. Verify image alt text reads correctly. Verify form labels are associated.</li>
+        <li><strong>Reflow check.</strong> Zoom the browser to 200%. Verify the page reflows to a single column without horizontal scroll. Verify no text gets clipped. Verify interactive elements stay reachable.</li>
+      </ol>
+      <p>Run the same three checks in light mode and dark mode, contrast and focus-ring visibility can differ.</p>
+    </section>
+
+    <section aria-labelledby="examples-heading">
+      <h2 id="examples-heading">Visual examples</h2>
+      <div class="example-stack">
+        <figure class="example-figure">
+          <img src="assets/a11y-mode-1.png" alt="The accessibility-mode interface, showing a design walkable by keyboard with focus rings visible at every step.">
+          <figcaption>Accessibility mode walks the design with keyboard input only, surfacing focus rings, missing labels, and broken focus order before engineering picks it up.</figcaption>
+        </figure>
+        <figure class="example-figure">
+          <img src="assets/a11y-mode-2.png" alt="The accessibility-mode interface in screen-reader simulation, displaying the announcement order and labels a screen reader would surface.">
+          <figcaption>Screen-reader simulation announces each region in DOM order, exposing where the announcement order diverges from the intended reading order.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section aria-labelledby="process-heading">
+      <h2 id="process-heading">Process</h2>
+      <p>This is a process pattern, not a code pattern. The deliverable is a completed checklist attached to the design handoff.</p>
+      <pre><code>1. Keyboard-only
+   - [ ] All interactive elements reachable via Tab
+   - [ ] Focus ring visible at every step (3:1+ contrast)
+   - [ ] Esc closes every modal, menu, tooltip
+   - [ ] Focus returns to invoking element after modal close
+   - [ ] No keyboard traps (focus can always move forward and backward)
+
+2. Screen reader (VoiceOver Mac / NVDA Win)
+   - [ ] Heading order announces correctly (H1 → H2 → H3, no skips)
+   - [ ] Landmarks announced (banner / nav / main / aside / contentinfo)
+   - [ ] Image alt text matches the three-state pattern (#08)
+   - [ ] Form labels associated; required state announced
+   - [ ] Announcement order matches reading order
+
+3. Reflow at 200% zoom
+   - [ ] Single column, no horizontal scroll
+   - [ ] No text clipped
+   - [ ] Interactive elements still reachable</code></pre>
+    </section>
+
+    <section aria-labelledby="annotation-heading">
+      <h2 id="annotation-heading">Annotation</h2>
+      <p>Attach the completed checklist to the design handoff (Figma comment, ticket, or design review doc). Note any known failures with the workaround or the engineering note.</p>
+      <pre><code>Validated: 2026-MM-DD
+Tools:     VoiceOver 13.0 (macOS), Chrome 130, light + dark
+Failures:  none / [list]
+Notes:     Modal close behavior coordinated with team; see ticket #...</code></pre>
+    </section>
+
+    <section aria-labelledby="wcag-heading">
+      <h2 id="wcag-heading">WCAG mapping</h2>
+      <ul class="criteria-list">
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html" target="_blank" rel="noopener noreferrer">2.1.1 Keyboard<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+         the keyboard-only check
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html" target="_blank" rel="noopener noreferrer">4.1.2 Name, Role, Value<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+         the screen-reader pass
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/reflow.html" target="_blank" rel="noopener noreferrer">1.4.10 Reflow<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">AA</span>
+         the 200% reflow check
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="related-heading">
+      <h2 id="related-heading">Related patterns</h2>
+      <ul>
+        <li>Focus order &amp; keyboard navigation (#06), the annotated focus path is what this validates</li>
+        <li>Structure landmarks (#07), the screen-reader pass verifies landmarks announce correctly</li>
+        <li>Alt text annotation (#08), image alt is verified in the screen-reader pass</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="reading-heading">
+      <h2 id="reading-heading">Further reading</h2>
+      <ul>
+        <li><a href="https://webaim.org/articles/voiceover/" target="_blank" rel="noopener noreferrer">WebAIM: VoiceOver guide<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://webaim.org/articles/nvda/" target="_blank" rel="noopener noreferrer">WebAIM: NVDA guide<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.a11yproject.com/posts/getting-started-with-voiceover/" target="_blank" rel="noopener noreferrer">A11y Project: getting started with VoiceOver<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.deque.com/axe/devtools/" target="_blank" rel="noopener noreferrer">axe DevTools<span class="sr-only"> (opens in new tab)</span></a>, complementary automated audit</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="../../">&larr; All patterns</a></p>
+    <p>Hub: <a href="https://ykimoh.github.io" target="_blank" rel="noopener noreferrer">ykimoh.github.io<span class="sr-only"> (opens in new tab)</span></a> &middot; Source: <a href="https://github.com/ykimoh/inclusive-cross-platform-patterns" target="_blank" rel="noopener noreferrer">github.com/ykimoh/inclusive-cross-platform-patterns<span class="sr-only"> (opens in new tab)</span></a></p>
+    <p>Last updated: 2026</p>
+  </footer>
+</body>
+</html>

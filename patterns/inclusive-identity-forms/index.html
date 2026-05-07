@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inclusive identity forms, Inclusive Cross-Platform Patterns</title>
+  <meta name="description" content="Form patterns for gender, name, and pronoun fields that support open-ended self-identification rather than binary defaults.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <p class="eyebrow">Pattern 05 &middot; Design</p>
+    <h1>Inclusive identity forms</h1>
+    <p class="subhead">Gender, name, and pronoun fields that support open-ended self-identification rather than binary defaults.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <aside class="draft-banner" role="status">
+      <p><strong>Draft.</strong> Visual examples and copy review pending. Pattern logic and WCAG mapping are scaffolded; ready for Young&rsquo;s pass.</p>
+    </aside>
+
+    <section aria-labelledby="problem-heading">
+      <h2 id="problem-heading">Problem</h2>
+      <p>Binary gender forms (Male / Female radio buttons) exclude non-binary, agender, two-spirit, and questioning users. Required First Name + Last Name fields exclude users with mononymic naming traditions and people with single legal names. Title prefixes (Mr./Mrs.) impose gendered defaults at point of contact. Required gender fields where gender is irrelevant (a software signup form, say) collect data the product can&rsquo;t justify storing.</p>
+      <p>The unifying problem: identity forms encode the designer&rsquo;s assumed defaults as required structure, which becomes a wall for anyone whose identity doesn&rsquo;t fit the schema.</p>
+    </section>
+
+    <section aria-labelledby="pattern-heading">
+      <h2 id="pattern-heading">Pattern</h2>
+      <ul>
+        <li><strong>Gender:</strong> free-text input with an optional select-list of common identifiers (&ldquo;Woman,&rdquo; &ldquo;Man,&rdquo; &ldquo;Non-binary,&rdquo; &ldquo;Prefer to self-describe,&rdquo; &ldquo;Prefer not to say&rdquo;). Never required unless legally needed. Don&rsquo;t collect at all if the product doesn&rsquo;t use it.</li>
+        <li><strong>Name:</strong> single &ldquo;Full name&rdquo; field by default. Add separate &ldquo;Legal name&rdquo; only where legally required (government identification, banking, regulated payments). Allow single-name entries; don&rsquo;t require a last name.</li>
+        <li><strong>Pronouns:</strong> optional free-text or select with &ldquo;self-describe&rdquo; option. Display in the product where relevant (commit-author bylines, profile cards).</li>
+        <li><strong>Title prefix:</strong> omit unless legally required. If present, include &ldquo;Mx.&rdquo; and &ldquo;none.&rdquo;</li>
+        <li><strong>Sex assigned at birth:</strong> only collect where medically or legally required, separately from gender, with explicit explanation of why.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="examples-heading">
+      <h2 id="examples-heading">Visual examples</h2>
+      <div class="example-stack">
+        <figure class="example-figure">
+          <img src="assets/gender-form-1.png" alt="An inclusive gender-identity form with options including Woman, Man, Non-binary, and a &lsquo;Prefer to self-describe&rsquo; option.">
+          <figcaption>Gender field with a select-list of common identifiers and an open-ended self-describe option for users whose identity isn&rsquo;t represented.</figcaption>
+        </figure>
+        <figure class="example-figure">
+          <img src="assets/gender-form-2.png" alt="The form&rsquo;s expanded self-describe state, with a free-text input revealed below the select after the user chooses to self-describe.">
+          <figcaption>Self-describe state expands a free-text input below the select, keeping the primary list short while never closing the door on identities outside it.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section aria-labelledby="code-heading">
+      <h2 id="code-heading">Code</h2>
+      <p>The structural pattern is a combobox (select with self-describe) backed by a free-text fallback. Use semantic <code>&lt;label&gt;</code> association and <code>autocomplete</code> attributes where the browser can pre-fill correctly.</p>
+      <pre><code>&lt;!-- Name: single field, optional --&gt;
+&lt;label for="name"&gt;Name&lt;/label&gt;
+&lt;input id="name" name="name" type="text" autocomplete="name"&gt;
+
+&lt;!-- Gender: combobox with self-describe --&gt;
+&lt;label for="gender"&gt;Gender (optional)&lt;/label&gt;
+&lt;select id="gender" name="gender"&gt;
+  &lt;option value=""&gt;Prefer not to say&lt;/option&gt;
+  &lt;option&gt;Woman&lt;/option&gt;
+  &lt;option&gt;Man&lt;/option&gt;
+  &lt;option&gt;Non-binary&lt;/option&gt;
+  &lt;option value="self-describe"&gt;Prefer to self-describe&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;!-- Self-describe text input, revealed when "self-describe" is selected --&gt;
+&lt;label for="gender-self-describe"&gt;Self-describe&lt;/label&gt;
+&lt;input id="gender-self-describe" name="gender_self_describe" type="text"&gt;
+
+&lt;!-- Pronouns: optional --&gt;
+&lt;label for="pronouns"&gt;Pronouns (optional)&lt;/label&gt;
+&lt;input id="pronouns" name="pronouns" type="text" placeholder="e.g. she/her, they/them"&gt;</code></pre>
+    </section>
+
+    <section aria-labelledby="annotation-heading">
+      <h2 id="annotation-heading">Annotation</h2>
+      <p>Mark each form field on the design with required vs optional, the data&rsquo;s purpose, and the legal basis if applicable. Don&rsquo;t collect what you can&rsquo;t justify.</p>
+      <pre><code>Field: Gender
+Required: No
+Purpose: profile display
+Legal basis: none; drop if not needed
+Self-describe: yes</code></pre>
+    </section>
+
+    <section aria-labelledby="wcag-heading">
+      <h2 id="wcag-heading">WCAG mapping</h2>
+      <ul class="criteria-list">
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/labels-or-instructions.html" target="_blank" rel="noopener noreferrer">3.3.2 Labels or Instructions<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+         clear, persistent labels for every field
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/identify-input-purpose.html" target="_blank" rel="noopener noreferrer">1.3.5 Identify Input Purpose<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">AA</span>
+         <code>autocomplete</code> attributes for known input purposes
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/error-identification.html" target="_blank" rel="noopener noreferrer">3.3.1 Error Identification<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+         specific, programmatically-determinable validation errors
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="related-heading">
+      <h2 id="related-heading">Related patterns</h2>
+      <ul>
+        <li>Inclusive UX copy (#03), the labels and helper text on each field</li>
+        <li>Focus order &amp; keyboard navigation (#06), the field tab order, especially when self-describe reveals a new input</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="reading-heading">
+      <h2 id="reading-heading">Further reading</h2>
+      <ul>
+        <li><a href="https://designsystem.digital.gov/components/" target="_blank" rel="noopener noreferrer">U.S. Web Design System, form components<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.w3.org/WAI/tutorials/forms/" target="_blank" rel="noopener noreferrer">W3C WAI Forms Tutorial<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.a11yproject.com/posts/how-to-write-accessible-form-labels/" target="_blank" rel="noopener noreferrer">A11y Project: accessible form labels<span class="sr-only"> (opens in new tab)</span></a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="../../">&larr; All patterns</a></p>
+    <p>Hub: <a href="https://ykimoh.github.io" target="_blank" rel="noopener noreferrer">ykimoh.github.io<span class="sr-only"> (opens in new tab)</span></a> &middot; Source: <a href="https://github.com/ykimoh/inclusive-cross-platform-patterns" target="_blank" rel="noopener noreferrer">github.com/ykimoh/inclusive-cross-platform-patterns<span class="sr-only"> (opens in new tab)</span></a></p>
+    <p>Last updated: 2026</p>
+  </footer>
+</body>
+</html>
