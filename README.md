@@ -14,7 +14,7 @@ Plain HTML and CSS, no build step. Served via GitHub Pages from the repo root.
 
 ## Accessibility
 
-WCAG 2.1 AA target. Semantic landmarks, skip-link, visible focus indicators, system font stack, dark-mode via `prefers-color-scheme`. The library's own conformance is part of its evidence, it is tested with axe DevTools, WAVE, and manual keyboard navigation before each push.
+WCAG 2.1 AA target. Semantic landmarks, skip-link, visible focus indicators, Newsreader display + Public Sans body via Google Fonts, dark-mode via `prefers-color-scheme`. The library's own conformance is part of its evidence, it is tested with axe DevTools, WAVE, and manual keyboard navigation before each push.
 
 ## Contributing
 
