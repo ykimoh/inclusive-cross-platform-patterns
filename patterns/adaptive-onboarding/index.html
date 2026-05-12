@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Adaptive onboarding state, Inclusive Cross-Platform Patterns</title>
+  <meta name="description" content="Onboarding flows that progressively disclose features based on detected state (first-run, screen-reader-detected, prefers-reduced-motion) rather than a fixed wizard.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <p class="eyebrow">Pattern 11 &middot; Design</p>
+    <h1>Adaptive onboarding state</h1>
+    <p class="subhead">Onboarding as a state-aware composition, not a fixed wizard. Disclosures gated by first-run state, user preferences, and interaction context &mdash; surfaced in the moment of task.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <aside class="draft-banner" role="status">
+      <p><strong>Draft.</strong> Visual examples and copy review pending. Pattern logic and WCAG mapping are scaffolded; ready for Young&rsquo;s pass.</p>
+    </aside>
+
+    <section aria-labelledby="problem-heading">
+      <h2 id="problem-heading">Problem</h2>
+      <p>Wizard-style onboarding forces every user through the same N-step intro regardless of context. For screen-reader users, the visual carousel slides announce empty content. For users with reduced-motion preferences, animated walkthroughs are jarring or get skipped entirely. For returning users on a new device, the wizard is friction they&rsquo;ve already paid &mdash; with no signal to the product that they already know it. Onboarding is treated as a single binary (show the wizard or not) instead of a state-aware composition that adapts what it discloses, when, and how.</p>
+      <p>The cost is not theoretical. Inaccessible onboarding is where many users drop off before reaching the product at all &mdash; a problem that compounds for users already underserved by the typical interface.</p>
+    </section>
+
+    <section aria-labelledby="pattern-heading">
+      <h2 id="pattern-heading">Pattern</h2>
+      <p>Adaptive onboarding is an exercise in <em>progressive interface disclosure</em>. Detect state inputs across three categories and compose the onboarding from modular disclosures, each gated independently:</p>
+      <ol>
+        <li><strong>First-run vs. returning state.</strong> Track in localStorage / app state / server-side per account. Returning-on-new-device is a third state worth surfacing differently from cold first-run.</li>
+        <li><strong>User preferences.</strong> <code>prefers-reduced-motion</code>, <code>prefers-color-scheme</code>, OS-level large-text settings, locale, <code>prefers-contrast</code> where available.</li>
+        <li><strong>Interaction context.</strong> Pointer type (<code>any-pointer: coarse</code> implies touch-primary), assistive-technology hints (no reliable JS API, but focus patterns and Web Speech APIs can hint).</li>
+      </ol>
+      <p>Compose the onboarding from disclosures rather than steps. Each disclosure is independent and surfaces where it&rsquo;s useful:</p>
+      <ul>
+        <li><strong>Text-first feature summary</strong> &mdash; the canonical version, always available, accessible by default. Never gated.</li>
+        <li><strong>Visual feature tour</strong> &mdash; layered on top for users without reduced-motion preference. Hidden, not just paused, when motion is reduced.</li>
+        <li><strong>Contextual tutorial</strong> &mdash; surfaces in the moment of task the first time the user reaches the feature, not pre-loaded as a wizard up front.</li>
+        <li><strong>Sensitive setting prompts</strong> (notifications, location, payment) &mdash; always defer to first-use, never block onboarding.</li>
+      </ul>
+      <p>The result: every user gets the same canonical information, but the shape adapts. Reduced-motion users skip the animations and read the text. Screen-reader users hear a single coherent summary instead of empty carousel slides. Returning users skip what they&rsquo;ve already seen.</p>
+    </section>
+
+    <section aria-labelledby="reference-heading">
+      <h2 id="reference-heading">Reference</h2>
+      <p>This pattern is the core education model of Beyond, Young Kim&rsquo;s 2023 MFA thesis. Beyond&rsquo;s Annotation Assistant doesn&rsquo;t run a wizard at startup &mdash; it surfaces an animated guide for each annotation type (keyboard navigation, structure landmarks, alt text) when the designer reaches that step, paired with preloaded samples and step-by-step contextual tutorials. Education is progressively disclosed in the moment of task, not pre-loaded as a fixed flow before the designer can begin work.</p>
+      <p>The pattern in this library generalizes that to product onboarding broadly. See <a href="https://ykimoh.github.io/beyond-mfa/" target="_blank" rel="noopener noreferrer">Beyond MFA thesis<span class="sr-only"> (opens in new tab)</span></a> for the original prototype.</p>
+    </section>
+
+    <section aria-labelledby="examples-heading">
+      <h2 id="examples-heading">Visual examples</h2>
+      <p>Visual examples of an adaptive onboarding composition (text-first summary, motion-gated visual tour, contextual tutorial surfaced in-task) are pending Young&rsquo;s pass. The Beyond MFA deck shows the Annotation Assistant surfacing &ldquo;What is Landmarks?&rdquo; as a contextual tutorial when the designer is annotating landmarks, not as a pre-task overview.</p>
+    </section>
+
+    <section aria-labelledby="code-heading">
+      <h2 id="code-heading">Code</h2>
+      <p>State detection at the CSS layer (no JS needed). Text-first is the default; the visual tour is the layer added back when motion is permitted:</p>
+      <pre><code>/* Default: text-first summary; visual tour hidden */
+.feature-tour-text      { display: block; }
+.feature-tour-animation { display: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .feature-tour-animation { display: block; }
+  .feature-tour-text      { display: none; }
+}</code></pre>
+      <p>First-run vs. returning state, in JS:</p>
+      <pre><code>const KEY = 'app:onboarding-complete';
+const isFirstRun = !localStorage.getItem(KEY);
+
+if (isFirstRun) {
+  showCoreSummary();           // independent disclosure
+  localStorage.setItem(KEY, '1');
+}
+
+// Contextual tutorials surface on first reach of a feature,
+// gated by per-feature keys &mdash; not coupled to first-run.</code></pre>
+    </section>
+
+    <section aria-labelledby="annotation-heading">
+      <h2 id="annotation-heading">Annotation</h2>
+      <p>In design files, document each disclosure as a separate component with its gate condition spelled out. Avoid coupling unrelated disclosures &mdash; the gates are independent. A typical spec entry:</p>
+      <pre><code>Disclosure:   feature-tour
+Gate:         prefers-reduced-motion: no-preference
+Fallback:     feature-summary-text (always present)
+Surface:      first reach of /home; dismissible
+
+Disclosure:   tutorial-landmarks
+Gate:         first-reach of annotation flow
+Surface:      inline at annotation step
+Dismissible:  yes
+Persistent:   no (re-surface for new project)</code></pre>
+    </section>
+
+    <section aria-labelledby="wcag-heading">
+      <h2 id="wcag-heading">WCAG mapping</h2>
+      <ul class="criteria-list">
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/animation-from-interactions.html" target="_blank" rel="noopener noreferrer">2.3.3 Animation from Interactions<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">AAA</span>
+          animated walkthroughs respect <code>prefers-reduced-motion</code>
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/on-focus.html" target="_blank" rel="noopener noreferrer">3.2.1 On Focus<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+          focus into a disclosure doesn&rsquo;t trigger unrequested context changes
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/on-input.html" target="_blank" rel="noopener noreferrer">3.2.2 On Input<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+          selecting an onboarding option doesn&rsquo;t trigger unexpected navigation
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/content-on-hover-or-focus.html" target="_blank" rel="noopener noreferrer">1.4.13 Content on Hover or Focus<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">AA</span>
+          tooltip-style contextual disclosures are dismissible, hoverable, persistent
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="related-heading">
+      <h2 id="related-heading">Related patterns</h2>
+      <ul>
+        <li><a href="../inclusive-ux-copy/">Inclusive UX copy (#03)</a>, where the text-first summary is the canonical version and its copy choices matter most</li>
+        <li><a href="../keyboard-navigation/">Focus order &amp; keyboard navigation (#06)</a>, the focus path through onboarding disclosures must be reachable</li>
+        <li><a href="../accessibility-mode-validation/">Accessibility-mode validation (#09)</a>, validate each onboarding state combination, not just the default</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="reading-heading">
+      <h2 id="reading-heading">Further reading</h2>
+      <ul>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion" target="_blank" rel="noopener noreferrer">MDN: prefers-reduced-motion<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.w3.org/TR/mediaqueries-5/" target="_blank" rel="noopener noreferrer">W3C: Media Queries Level 5<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://design-system.service.gov.uk/components/details/" target="_blank" rel="noopener noreferrer">GOV.UK Design System: progressive disclosure<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.a11yproject.com/posts/understanding-vestibular-disorders/" target="_blank" rel="noopener noreferrer">A11y Project: Understanding Vestibular Disorders<span class="sr-only"> (opens in new tab)</span></a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="../../">&larr; All patterns</a></p>
+    <p>Hub: <a href="https://ykimoh.github.io" target="_blank" rel="noopener noreferrer">ykimoh.github.io<span class="sr-only"> (opens in new tab)</span></a> &middot; Source: <a href="https://github.com/ykimoh/inclusive-cross-platform-patterns" target="_blank" rel="noopener noreferrer">github.com/ykimoh/inclusive-cross-platform-patterns<span class="sr-only"> (opens in new tab)</span></a></p>
+    <p>Last updated: 2026</p>
+  </footer>
+</body>
+</html>
