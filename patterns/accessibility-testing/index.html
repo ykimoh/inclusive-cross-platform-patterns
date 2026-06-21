@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accessibility testing with people with disabilities, Inclusive Cross-Platform Patterns</title>
+  <meta name="description" content="How to design and run an unmoderated accessibility test session with users of assistive technology: recruitment, task framing, observation, and analysis.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <p class="eyebrow">Pattern 10 &middot; Validate</p>
+    <h1>Accessibility testing with people with disabilities</h1>
+    <p class="subhead">Recruit, run, and analyze an accessibility test session with users of assistive technology, the validation that automated audits and self-testing cannot deliver.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <aside class="draft-banner" role="status">
+      <p><strong>Draft.</strong> Visual examples and copy review pending. Pattern logic and WCAG mapping are scaffolded; ready for Young&rsquo;s pass.</p>
+    </aside>
+
+    <section aria-labelledby="problem-heading">
+      <h2 id="problem-heading">Problem</h2>
+      <p>Designers without disabilities can&rsquo;t predict every barrier, assistive-tech use is highly individual. The same screen reader behaves differently with different users&rsquo; rotor settings, browse-mode preferences, and verbosity. Two AT users with the same nominal tooling navigate the same page in materially different ways.</p>
+      <p>Testing only with non-disabled team members misses entire categories of failure. &ldquo;We tested with screen readers&rdquo; usually means &ldquo;we used VoiceOver ourselves for ten minutes.&rdquo; That&rsquo;s a useful smoke test, not a validation.</p>
+    </section>
+
+    <section aria-labelledby="pattern-heading">
+      <h2 id="pattern-heading">Pattern</h2>
+      <ul>
+        <li><strong>Recruit users who actually use assistive technology daily,</strong> not occasional users. Use established research panels (Fable, Knowbility, Disabled List) so recruitment doesn&rsquo;t fall on the team&rsquo;s personal network.</li>
+        <li><strong>Pay at standard research rates.</strong> Research participation is paid work, not volunteer service. Match what you&rsquo;d pay non-disabled testers for the same time.</li>
+        <li><strong>Frame tasks neutrally.</strong> Don&rsquo;t ask &ldquo;Can you complete X?&rdquo; (yes/no with a leading frame). Ask &ldquo;Try to accomplish Y&rdquo; (open observation). Avoid the word &ldquo;easy.&rdquo;</li>
+        <li><strong>Run unmoderated where possible.</strong> An unmoderated session captures friction the moderated session smooths over, in moderation, the moderator unconsciously coaches.</li>
+        <li><strong>Observe without intervening.</strong> If a participant gets stuck, note it. Don&rsquo;t rescue. Stuck is the data.</li>
+        <li><strong>Analyze for friction and frustration, not just task-completion rates.</strong> A user who completes the task but spends three minutes navigating a misordered DOM has surfaced a failure even if the rate says success.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="examples-heading">
+      <h2 id="examples-heading">Visual examples</h2>
+      <figure class="example-figure">
+        <img src="assets/testing-overview.png" alt="The accessibility-testing interface showing the four-stage flow: recruitment with disability criteria, study setup, unmoderated session capture, and analysis.">
+        <figcaption>The accessibility-testing flow connects designers with users of assistive technology through a structured four-stage process: Recruit, Set up, Moderate, Analyze.</figcaption>
+      </figure>
+    </section>
+
+    <section aria-labelledby="process-heading">
+      <h2 id="process-heading">Process</h2>
+      <p>This is a process pattern. The deliverable is a study report attached to the design or release decision.</p>
+      <pre><code>1. Recruit
+   - Channel: Fable / Knowbility / Disabled List / paid panel
+   - Criteria: AT used daily, not occasionally
+   - N: 5–8 participants per primary AT category
+   - Compensation: standard research rate (match non-disabled rate)
+
+2. Set up
+   - Test build: same artifact non-disabled testers see
+   - Devices: participants' own; do NOT remote-control
+   - Tasks: 3–5 per session; 60–90 minutes total
+   - Framing: "Try to..." not "Can you..."
+
+3. Moderate (or unmoderated)
+   - Unmoderated by default; moderated only when consent specifies
+   - If moderated: do not coach. Log stuck moments without rescuing.
+   - Record (with consent) for review; transcripts faster than playback
+
+4. Analyze
+   - Friction inventory, not just success rates
+   - Categorize by AT category, severity, and pattern (cross-link to library)
+   - Prioritize fixes that block, not fixes that annoy
+   - Share findings with participants who opted in</code></pre>
+    </section>
+
+    <section aria-labelledby="annotation-heading">
+      <h2 id="annotation-heading">Documentation</h2>
+      <p>Attach the study to the release decision. Document recruitment criteria (so the validation is repeatable) and the friction inventory with severity (so prioritization is auditable).</p>
+      <pre><code>Study:        [name]
+Run:          2026-MM-DD
+N:            [count] across [AT categories]
+Compensation: [rate]
+Tasks:        [list]
+Findings:     [friction inventory by severity]
+Pattern hits: [cross-links to pattern library]
+Decision:     ship / ship-with-fixes / hold</code></pre>
+    </section>
+
+    <section aria-labelledby="wcag-heading">
+      <h2 id="wcag-heading">WCAG mapping</h2>
+      <p>Accessibility testing with people with disabilities is a process pattern that complements WCAG-conformance work. WCAG covers the technical surface; lived-experience testing covers the gap between &ldquo;technically conformant&rdquo; and &ldquo;actually usable.&rdquo;</p>
+      <p>It does not map to a single success criterion. It is the validation step that confirms (or refutes) every conformance claim made elsewhere.</p>
+    </section>
+
+    <section aria-labelledby="related-heading">
+      <h2 id="related-heading">Related patterns</h2>
+      <ul>
+        <li>Accessibility-mode validation walkthrough (#09), designer-runnable pre-handoff; this pattern picks up after handoff with the actual user</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="reading-heading">
+      <h2 id="reading-heading">Further reading</h2>
+      <ul>
+        <li><a href="https://makeitfable.com/" target="_blank" rel="noopener noreferrer">Fable Tech Labs<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://knowbility.org/" target="_blank" rel="noopener noreferrer">Knowbility<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.iaap-accessibility.org/" target="_blank" rel="noopener noreferrer">IAAP, International Association of Accessibility Professionals<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.section508.gov/test/agile-iterative/" target="_blank" rel="noopener noreferrer">Section 508 testing guidance<span class="sr-only"> (opens in new tab)</span></a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="../../">&larr; All patterns</a></p>
+    <p>Hub: <a href="https://ykimoh.github.io" target="_blank" rel="noopener noreferrer">ykimoh.github.io<span class="sr-only"> (opens in new tab)</span></a> &middot; Source: <a href="https://github.com/ykimoh/inclusive-cross-platform-patterns" target="_blank" rel="noopener noreferrer">github.com/ykimoh/inclusive-cross-platform-patterns<span class="sr-only"> (opens in new tab)</span></a></p>
+    <p>Last updated: 2026</p>
+  </footer>
+</body>
+</html>

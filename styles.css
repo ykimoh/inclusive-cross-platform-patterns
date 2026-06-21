@@ -1,0 +1,647 @@
+/*
+ * Inclusive Cross-Platform Patterns
+ * Aligned to the hub design system.
+ * Extends the hub's tokens and conventions with pattern-detail components:
+ * code blocks, demo tiles, WCAG criteria list, eyebrow + summary + breadcrumb.
+ */
+
+/* ---------- Tokens ---------- */
+
+:root {
+  /* Color, light */
+  --paper: #FFFFFF;
+  --paper-soft: #F4F4F4;
+  --ink: #15151A;
+  --ink-soft: #525258;
+  --accent: #1351A6;
+  --accent-hover: #0E3F85;
+  --rule: #D4D4D4;
+
+  /* Status / state */
+  --pass-fg: #0E5A2C;
+  --fail-fg: #8E1F1B;
+
+  /* Type families */
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "Public Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Type scale */
+  --scale-xs: 0.75rem;
+  --scale-sm: 0.875rem;
+  --scale-base: 1.0625rem;
+  --scale-lg: 1.1875rem;
+  --scale-xl: 1.5rem;
+  --scale-2xl: 2.25rem;
+  --scale-3xl: 3rem;
+  --scale-4xl: 3.75rem;
+
+  /* Weights */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* Leading */
+  --leading-tight: 1.05;
+  --leading-snug: 1.25;
+  --leading-body: 1.65;
+
+  /* Tracking */
+  --track-tight: -0.02em;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  /* Layout */
+  --measure: 60rem;
+  --rail: 11rem;
+  --rail-gap: var(--space-7);
+  --page-pad: var(--space-5);
+}
+
+@media (min-width: 38rem) {
+  :root {
+    --page-pad: var(--space-7);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #111111;
+    --paper-soft: #1C1C1C;
+    --ink: #F4F4F4;
+    --ink-soft: #A8A8A8;
+    --accent: #7BB3E9;
+    --accent-hover: #99C8F0;
+    --rule: #2A2A2A;
+    --pass-fg: #6AD08A;
+    --fail-fg: #ED7572;
+  }
+}
+
+/* ---------- Reset ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--scale-base);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-body);
+  color: var(--ink);
+  background: var(--paper);
+  font-feature-settings: "kern", "liga";
+}
+
+/* ---------- Visually-hidden utility ---------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Skip link ---------- */
+
+.skip-link {
+  position: absolute;
+  top: -3rem;
+  left: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  background: var(--accent);
+  color: #FFFFFF;
+  font-family: var(--font-body);
+  font-size: var(--scale-sm);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  border-radius: 2px;
+  z-index: 100;
+}
+
+.skip-link:focus { top: var(--space-4); }
+
+/* ---------- Layout shell ---------- */
+
+.site-header,
+main,
+.site-footer {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding-left: var(--page-pad);
+  padding-right: var(--page-pad);
+}
+
+main { outline: none; }
+main:focus-visible { outline: none; }
+
+/* ---------- Header ---------- */
+
+.site-header {
+  padding-top: var(--space-9);
+  padding-bottom: var(--space-7);
+}
+
+.site-header .eyebrow {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-body);
+  font-size: var(--scale-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+.site-header h1 {
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-display);
+  font-size: var(--scale-3xl);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--track-tight);
+  color: var(--ink);
+}
+
+@media (min-width: 38rem) {
+  .site-header h1 { font-size: var(--scale-4xl); }
+}
+
+.subhead {
+  margin: 0;
+  max-width: 36rem;
+  font-family: var(--font-body);
+  font-size: var(--scale-lg);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-snug);
+  color: var(--ink-soft);
+}
+
+/* ---------- Main + sections ---------- */
+
+main { padding-bottom: var(--space-8); }
+
+main > section {
+  padding-top: var(--space-7);
+  margin-top: var(--space-7);
+  border-top: 1px solid var(--rule);
+}
+
+main > section:first-of-type { margin-top: 0; }
+
+main > section > h2 {
+  margin: 0 0 var(--space-5);
+  font-family: var(--font-body);
+  font-size: var(--scale-xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+
+main p {
+  margin: 0 0 var(--space-4);
+  max-width: 36rem;
+}
+
+main p:last-child { margin-bottom: 0; }
+
+main ul,
+main ol {
+  margin: 0 0 var(--space-4);
+  padding-left: var(--space-5);
+  max-width: 36rem;
+}
+
+main li { margin: var(--space-2) 0; }
+
+/* Rail layout: section heading in a left rail at wider viewports. */
+
+@media (min-width: 56rem) {
+  main > section {
+    display: grid;
+    grid-template-columns: var(--rail) 1fr;
+    column-gap: var(--rail-gap);
+    align-items: start;
+  }
+
+  main > section > h2 {
+    grid-column: 1;
+    grid-row: 1 / span 99;
+    margin: 0;
+    font-size: var(--scale-lg);
+    line-height: var(--leading-snug);
+    text-align: right;
+    padding-top: 0.1em;
+  }
+
+  main > section > *:not(h2) { grid-column: 2; }
+}
+
+/* ---------- Section pre-heading (above H2 in rail-paired sections) ---------- */
+
+.section-eyebrow {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-body);
+  font-size: var(--scale-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ---------- Resource list (titled items, no chrome) ---------- */
+
+.resource-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: none;
+}
+
+.resource-list > li {
+  margin: 0;
+  padding: 0;
+}
+
+.resource-list > li + li { margin-top: var(--space-6); }
+
+.resource-list h3 {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--scale-lg);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+  color: var(--ink);
+}
+
+.resource-list .num {
+  display: inline-block;
+  margin-right: var(--space-2);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-regular);
+}
+
+.resource-list p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+/* In-development status badge */
+
+.status {
+  display: inline-block;
+  margin-left: var(--space-2);
+  padding: 0.0625em 0.5em;
+  font-family: var(--font-body);
+  font-size: var(--scale-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  color: var(--ink-soft);
+  vertical-align: 0.15em;
+}
+
+/* ---------- Draft banner (scaffolded pages, removed when shipping) ---------- */
+
+.draft-banner {
+  margin: 0 0 var(--space-6);
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper-soft);
+  border-left: 3px solid var(--accent);
+  border-radius: 2px;
+  font-family: var(--font-body);
+  font-size: var(--scale-sm);
+  color: var(--ink-soft);
+  max-width: 36rem;
+}
+
+.draft-banner p { margin: 0; }
+.draft-banner strong { color: var(--ink); }
+
+/* ---------- Pattern detail page: eyebrow, summary, breadcrumb ---------- */
+
+.breadcrumb {
+  margin: 0 0 var(--space-5);
+  font-family: var(--font-body);
+  font-size: var(--scale-sm);
+  color: var(--ink-soft);
+}
+
+.summary {
+  margin: 0 0 var(--space-7);
+  max-width: 36rem;
+  font-family: var(--font-body);
+  font-size: var(--scale-lg);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-snug);
+  color: var(--ink);
+}
+
+/* ---------- Code blocks ---------- */
+
+pre {
+  margin: var(--space-4) 0;
+  padding: var(--space-4) var(--space-5);
+  background: var(--paper-soft);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--scale-sm);
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 100%;
+}
+
+pre code {
+  font-family: inherit;
+  font-size: inherit;
+  background: transparent;
+  padding: 0;
+  border: 0;
+  color: inherit;
+}
+
+p code,
+li code {
+  padding: 0.0625em 0.4em;
+  background: var(--paper-soft);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  color: var(--ink);
+}
+
+/* ---------- Demo tiles (visual examples) ---------- */
+
+.demo-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin: var(--space-4) 0;
+  max-width: 100%;
+}
+
+@media (min-width: 32rem) {
+  .demo-row { grid-template-columns: 1fr 1fr; }
+}
+
+.demo-tile {
+  padding: var(--space-6) var(--space-4);
+  background: var(--paper-soft);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.demo-tile .demo-label {
+  display: block;
+  margin-bottom: var(--space-4);
+  font-family: var(--font-body);
+  font-size: var(--scale-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.demo-tile.demo-fail .demo-label { color: var(--fail-fg); }
+.demo-tile.demo-pass .demo-label { color: var(--pass-fg); }
+
+.demo-tile .demo-ratio {
+  display: block;
+  margin-top: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--scale-xs);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Demo button: hardcoded fail/pass colors so they demonstrate the actual
+   contrast point regardless of user theme. */
+
+.btn-demo {
+  display: inline-block;
+  padding: 0.625rem 1.25rem;
+  font-family: var(--font-body);
+  font-size: var(--scale-base);
+  font-weight: var(--weight-medium);
+  border: 0;
+  border-radius: 4px;
+  cursor: default;
+}
+
+.btn-demo.btn-fail {
+  background: #FF7A7A;
+  color: #FFFFFF;
+}
+
+.btn-demo.btn-pass {
+  background: #1351A6;
+  color: #FFFFFF;
+}
+
+/* ---------- Example figures (Beyond mockup screenshots) ---------- */
+
+.example-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  margin: var(--space-4) 0;
+}
+
+.example-figure {
+  margin: 0;
+  max-width: 100%;
+}
+
+.example-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--paper-soft);
+}
+
+.example-figure figcaption {
+  margin-top: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--scale-sm);
+  color: var(--ink-soft);
+  line-height: var(--leading-snug);
+}
+
+/* Demo-tile variant that hosts a screenshot instead of a button */
+
+.demo-tile.demo-image { padding: var(--space-3); }
+
+.demo-tile.demo-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+  margin: 0 auto var(--space-2);
+}
+
+.demo-tile.demo-image .demo-label {
+  margin-bottom: var(--space-3);
+}
+
+/* ---------- WCAG criteria list ---------- */
+
+.criteria-list {
+  list-style: none;
+  margin: var(--space-4) 0;
+  padding: 0;
+  max-width: 100%;
+}
+
+.criteria-list > li {
+  margin: var(--space-2) 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper-soft);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  font-size: var(--scale-sm);
+  color: var(--ink);
+}
+
+.criteria-list .level {
+  display: inline-block;
+  margin-left: var(--space-2);
+  padding: 0.0625em 0.5em;
+  font-family: var(--font-body);
+  font-size: var(--scale-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.04em;
+  background: var(--accent);
+  color: #FFFFFF;
+  border-radius: 2px;
+  vertical-align: 0.15em;
+}
+
+/* ---------- Links ---------- */
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color 120ms ease, text-decoration-color 120ms ease, text-underline-offset 120ms ease;
+}
+
+a:hover {
+  color: var(--accent-hover);
+  text-underline-offset: 0.3em;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* External link: arrow pseudo + sr-only span (in markup). */
+
+a[target="_blank"]::after {
+  content: "\00A0\2197";
+  display: inline-block;
+  font-size: 0.85em;
+  vertical-align: 0.05em;
+  color: inherit;
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  margin-top: var(--space-7);
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-9);
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-body);
+  font-size: var(--scale-sm);
+  color: var(--ink-soft);
+}
+
+.site-footer p { margin: var(--space-1) 0; }
+
+.site-footer a {
+  color: var(--ink-soft);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+}
+
+.site-footer a:hover { color: var(--accent); }
+
+/* ---------- Motion ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .site-header,
+  main > section,
+  .site-footer {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: rise 540ms cubic-bezier(0.2, 0.6, 0.2, 1) forwards;
+  }
+
+  .site-header { animation-delay: 80ms; }
+  main > section:nth-of-type(1) { animation-delay: 180ms; }
+  main > section:nth-of-type(2) { animation-delay: 260ms; }
+  main > section:nth-of-type(3) { animation-delay: 340ms; }
+  main > section:nth-of-type(4) { animation-delay: 420ms; }
+  main > section:nth-of-type(5) { animation-delay: 500ms; }
+  main > section:nth-of-type(6) { animation-delay: 580ms; }
+  main > section:nth-of-type(7) { animation-delay: 660ms; }
+  main > section:nth-of-type(8) { animation-delay: 740ms; }
+  .site-footer { animation-delay: 820ms; }
+
+  @keyframes rise {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a { transition: none; }
+}
+
+/* ---------- Forced colors (Windows High Contrast) ---------- */
+
+@media (forced-colors: active) {
+  .skip-link,
+  a:focus-visible {
+    outline: 2px solid CanvasText;
+  }
+  .demo-tile,
+  .criteria-list > li,
+  pre {
+    border: 1px solid CanvasText;
+  }
+}

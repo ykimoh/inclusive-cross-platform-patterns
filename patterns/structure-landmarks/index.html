@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Structure landmarks annotation, Inclusive Cross-Platform Patterns</title>
+  <meta name="description" content="How to annotate ARIA landmark regions so screen-reader users can skip-jump through page structure rather than reading top-to-bottom.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <p class="eyebrow">Pattern 07 &middot; Annotate</p>
+    <h1>Structure landmarks annotation</h1>
+    <p class="subhead">Annotate landmark regions on the design so screen-reader users can skip-jump through page structure instead of reading every word, every page.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <aside class="draft-banner" role="status">
+      <p><strong>Draft.</strong> Visual examples and copy review pending. Pattern logic and WCAG mapping are scaffolded; ready for Young&rsquo;s pass.</p>
+    </aside>
+
+    <section aria-labelledby="problem-heading">
+      <h2 id="problem-heading">Problem</h2>
+      <p>Sighted users see headers, sidebars, and footers as visual regions. Screen-reader users navigate by landmark roles or by sequential reading. Without semantic landmarks, every page begins at the global navigation and the user has to traverse it again before reaching the page content.</p>
+      <p>Generic <code>&lt;div&gt;</code>-soup markup is the most common cause: visually distinct regions exist on screen, but the assistive-tech tree has no roles to jump between.</p>
+    </section>
+
+    <section aria-labelledby="pattern-heading">
+      <h2 id="pattern-heading">Pattern</h2>
+      <ul>
+        <li><strong>Annotate every region with its landmark role:</strong> <code>header</code> (banner), <code>nav</code> (navigation), <code>main</code>, <code>aside</code> (complementary), <code>footer</code> (contentinfo). Use the HTML element where it exists; only fall back to <code>role="..."</code> on a <code>&lt;div&gt;</code> when the element isn&rsquo;t available (e.g. nested <code>&lt;header&gt;</code> at section level still becomes a banner role only when at the top level).</li>
+        <li><strong>One <code>&lt;main&gt;</code> per page.</strong> Multiple mains break the bypass pattern.</li>
+        <li><strong>Label when multiple of the same type.</strong> <code>&lt;nav aria-label="Site navigation"&gt;</code> vs <code>&lt;nav aria-label="Section navigation"&gt;</code>. The label is announced by AT.</li>
+        <li><strong>Heading hierarchy is unbroken.</strong> H1 &rarr; H2 &rarr; H3 with no skipped levels. The H1 is the page title; landmarks structure the page; headings structure the content within landmarks.</li>
+        <li><strong>Skip-to-content link.</strong> Lands focus on <code>&lt;main&gt;</code> (which carries <code>tabindex="-1"</code>). Coordinated with the focus-order pattern.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="examples-heading">
+      <h2 id="examples-heading">Visual examples</h2>
+      <div class="example-stack">
+        <figure class="example-figure">
+          <img src="assets/landmark-1.png" alt="A design frame with the page-level header region annotated as the banner landmark.">
+          <figcaption>Step 1: identify and annotate the page-level header region as the banner landmark.</figcaption>
+        </figure>
+        <figure class="example-figure">
+          <img src="assets/landmark-3.png" alt="The same design with multiple landmark regions annotated and color-coded: banner, navigation, and main.">
+          <figcaption>Mid-pass: each major region is color-coded with its landmark role and labeled where multiple of the same role exist.</figcaption>
+        </figure>
+        <figure class="example-figure">
+          <img src="assets/landmark-6.png" alt="The completed landmark annotation with all regions identified: banner, navigation, main, complementary, and contentinfo.">
+          <figcaption>Complete annotation: every region carries an explicit landmark role, ready for the engineer to wire up semantic HTML or ARIA equivalents.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section aria-labelledby="code-heading">
+      <h2 id="code-heading">Code</h2>
+      <pre><code>&lt;a class="skip-link" href="#main"&gt;Skip to main content&lt;/a&gt;
+
+&lt;header&gt; &lt;!-- banner role, top-level only --&gt;
+  &lt;nav aria-label="Site navigation"&gt;
+    &lt;!-- primary nav --&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;
+
+&lt;main id="main" tabindex="-1"&gt;
+  &lt;h1&gt;Page title&lt;/h1&gt;
+
+  &lt;nav aria-label="Section navigation"&gt;
+    &lt;!-- in-page navigation; labeled to disambiguate from site nav --&gt;
+  &lt;/nav&gt;
+
+  &lt;article&gt;
+    &lt;h2&gt;Article heading&lt;/h2&gt;
+    &lt;!-- content --&gt;
+  &lt;/article&gt;
+
+  &lt;aside aria-label="Related"&gt; &lt;!-- complementary role --&gt;
+    &lt;!-- supporting content --&gt;
+  &lt;/aside&gt;
+&lt;/main&gt;
+
+&lt;footer&gt; &lt;!-- contentinfo role, top-level only --&gt;
+  &lt;!-- site-wide footer --&gt;
+&lt;/footer&gt;</code></pre>
+    </section>
+
+    <section aria-labelledby="annotation-heading">
+      <h2 id="annotation-heading">Annotation</h2>
+      <p>On the design, color-code each region by landmark role (banner / navigation / main / complementary / contentinfo). Where multiple regions share a role, name the label that disambiguates them. Record the heading hierarchy alongside.</p>
+      <pre><code>Banner          → header
+Navigation      → nav, aria-label="Site navigation"
+Main            → main (id="main")
+  Section nav   → nav, aria-label="Section navigation"
+  Article       → article (h2 = "Article heading")
+  Complementary → aside, aria-label="Related"
+Contentinfo    → footer
+
+Heading order: h1, h2, h2, h3; no skips</code></pre>
+    </section>
+
+    <section aria-labelledby="wcag-heading">
+      <h2 id="wcag-heading">WCAG mapping</h2>
+      <ul class="criteria-list">
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.html" target="_blank" rel="noopener noreferrer">1.3.1 Info and Relationships<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+         structure conveyed in presentation is also programmatic
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/bypass-blocks.html" target="_blank" rel="noopener noreferrer">2.4.1 Bypass Blocks<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+         mechanism to skip repeated blocks
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/headings-and-labels.html" target="_blank" rel="noopener noreferrer">2.4.6 Headings and Labels<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">AA</span>
+         descriptive headings and labels
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="related-heading">
+      <h2 id="related-heading">Related patterns</h2>
+      <ul>
+        <li>Focus order &amp; keyboard navigation (#06), the skip-link lands focus on the <code>&lt;main&gt;</code> landmark</li>
+        <li>Alt text annotation (#08), image semantics within the content landmarks</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="reading-heading">
+      <h2 id="reading-heading">Further reading</h2>
+      <ul>
+        <li><a href="https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/" target="_blank" rel="noopener noreferrer">WAI-ARIA Landmarks<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles#3._landmark_roles" target="_blank" rel="noopener noreferrer">MDN: ARIA landmark roles<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.a11yproject.com/posts/aria-landmark-roles/" target="_blank" rel="noopener noreferrer">A11y Project: ARIA landmark roles<span class="sr-only"> (opens in new tab)</span></a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="../../">&larr; All patterns</a></p>
+    <p>Hub: <a href="https://ykimoh.github.io" target="_blank" rel="noopener noreferrer">ykimoh.github.io<span class="sr-only"> (opens in new tab)</span></a> &middot; Source: <a href="https://github.com/ykimoh/inclusive-cross-platform-patterns" target="_blank" rel="noopener noreferrer">github.com/ykimoh/inclusive-cross-platform-patterns<span class="sr-only"> (opens in new tab)</span></a></p>
+    <p>Last updated: 2026</p>
+  </footer>
+</body>
+</html>

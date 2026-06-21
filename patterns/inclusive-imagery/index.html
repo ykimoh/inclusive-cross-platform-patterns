@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inclusive imagery, Inclusive Cross-Platform Patterns</title>
+  <meta name="description" content="Audit image content for representation across age, gender, ability, race, and culture; source from inclusive libraries.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <p class="eyebrow">Pattern 04 &middot; Design</p>
+    <h1>Inclusive imagery</h1>
+    <p class="subhead">Source and audit image content so the people in the product look like the people using the product.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <aside class="draft-banner" role="status">
+      <p><strong>Draft.</strong> Visual examples and copy review pending. Pattern logic and WCAG mapping are scaffolded; ready for Young&rsquo;s pass.</p>
+    </aside>
+
+    <section aria-labelledby="problem-heading">
+      <h2 id="problem-heading">Problem</h2>
+      <p>Stock photography skews toward a narrow demographic, young, white, conventionally able-bodied, conventionally attractive. Illustration sets default to one body type, one skin tone, one assumed gender expression. Users not represented in product imagery don&rsquo;t see themselves and infer they&rsquo;re not the audience, even when they are.</p>
+      <p>The failure mode is double: under-representation says &ldquo;you&rsquo;re not here,&rdquo; and token inclusion (one disabled person in a 12-image grid; one wheelchair stock photo) says &ldquo;you&rsquo;re a category, not a person.&rdquo;</p>
+    </section>
+
+    <section aria-labelledby="pattern-heading">
+      <h2 id="pattern-heading">Pattern</h2>
+      <ul>
+        <li>Source from libraries that are explicitly inclusive: <em>Disabled And Here</em>, <em>Affect the Verb</em>, <em>CreateHER Stock</em>, <em>Nappy.co</em>. Not as a substitute for general libraries, alongside them.</li>
+        <li>Audit each set of imagery against five axes: age, gender expression, race, ability (visible and non-visible), body type. Any axis with zero representation is a flag, not a balance.</li>
+        <li>Avoid token inclusion. One disabled person across an entire product reads as performative. Aim for representation that survives random sampling.</li>
+        <li>Match imagery to the actual user base, not aspirational marketing. If your users are 60% over 40 and the imagery is 100% under 30, the imagery is wrong.</li>
+        <li>Don&rsquo;t pair imagery and copy that conflict. A photo of one person with copy &ldquo;guys, look at this&rdquo; double-fails.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="examples-heading">
+      <h2 id="examples-heading">Visual examples</h2>
+      <p><em>Visual examples (a strip from inclusive libraries paired against a typical generic-stock baseline; an audit grid showing the five-axis check applied to a real product set) will be added during pattern review.</em></p>
+    </section>
+
+    <section aria-labelledby="code-heading">
+      <h2 id="code-heading">Code</h2>
+      <p>The code surface is small, image semantics and color-correct rendering. Most of the pattern lives in sourcing and review, not in markup.</p>
+      <pre><code>&lt;!-- Meaningful image: alt text describes what the image conveys, not what it depicts --&gt;
+&lt;img
+  src="customers-using-product.jpg"
+  alt="Three customers reviewing the dashboard together"
+&gt;
+
+&lt;!-- Decorative imagery: empty alt; never omitted --&gt;
+&lt;img src="brand-flourish.svg" alt=""&gt;
+
+&lt;!-- Color-managed rendering for skin tones across displays --&gt;
+&lt;picture&gt;
+  &lt;source srcset="portrait.avif" type="image/avif"&gt;
+  &lt;source srcset="portrait.webp" type="image/webp"&gt;
+  &lt;img src="portrait.jpg" alt="..." loading="lazy"&gt;
+&lt;/picture&gt;</code></pre>
+    </section>
+
+    <section aria-labelledby="annotation-heading">
+      <h2 id="annotation-heading">Annotation</h2>
+      <p>Tag each image slot in the design with required-representation criteria, sourcing notes, and the alt text. The criteria drive the asset request; the sourcing note is auditable later.</p>
+      <pre><code>Image slot: hero/3-up
+Required: 3 figures; minimum 2 of 5 axes represented per figure
+Source:   Disabled And Here / commission illustration
+Alt:      "Three product users in a working session"</code></pre>
+    </section>
+
+    <section aria-labelledby="wcag-heading">
+      <h2 id="wcag-heading">WCAG mapping</h2>
+      <ul class="criteria-list">
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/non-text-content.html" target="_blank" rel="noopener noreferrer">1.1.1 Non-text Content<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+         alt text for image semantics
+        </li>
+      </ul>
+      <p>Inclusive imagery is primarily a content-design pattern. WCAG covers <em>perception</em> of the image (alt text); it does not cover <em>who is in</em> the image. The latter is the inclusion layer this pattern adds.</p>
+    </section>
+
+    <section aria-labelledby="related-heading">
+      <h2 id="related-heading">Related patterns</h2>
+      <ul>
+        <li>Alt text annotation (#08), how to write the alt text for the image once it&rsquo;s sourced</li>
+        <li>Inclusive UX copy (#03), copy that pairs with the imagery without conflicting it</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="reading-heading">
+      <h2 id="reading-heading">Further reading</h2>
+      <ul>
+        <li><a href="https://affecttheverb.com/disabledandhere/" target="_blank" rel="noopener noreferrer">Disabled And Here<span class="sr-only"> (opens in new tab)</span></a>, free CC-BY photo library of disabled BIPOC</li>
+        <li><a href="https://affecttheverb.com/collection/" target="_blank" rel="noopener noreferrer">Affect the Verb, collection<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://inclusive.microsoft.design/" target="_blank" rel="noopener noreferrer">Microsoft Inclusive Design<span class="sr-only"> (opens in new tab)</span></a>, Persona Spectrum and Mismatch framing</li>
+        <li><a href="https://www.smashingmagazine.com/2021/03/inclusive-design-resources/" target="_blank" rel="noopener noreferrer">Smashing Magazine: inclusive design resources<span class="sr-only"> (opens in new tab)</span></a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="../../">&larr; All patterns</a></p>
+    <p>Hub: <a href="https://ykimoh.github.io" target="_blank" rel="noopener noreferrer">ykimoh.github.io<span class="sr-only"> (opens in new tab)</span></a> &middot; Source: <a href="https://github.com/ykimoh/inclusive-cross-platform-patterns" target="_blank" rel="noopener noreferrer">github.com/ykimoh/inclusive-cross-platform-patterns<span class="sr-only"> (opens in new tab)</span></a></p>
+    <p>Last updated: 2026</p>
+  </footer>
+</body>
+</html>

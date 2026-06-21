@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Color contrast, Inclusive Cross-Platform Patterns</title>
+  <meta name="description" content="Ensure text and meaningful UI elements meet WCAG 2.1 AA contrast ratios so users with low vision can perceive them. Pattern with code, annotations, and WCAG mapping.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <p class="eyebrow">Pattern 02 &middot; Design</p>
+    <h1>Color contrast</h1>
+    <p class="subhead">Ensure text and meaningful UI elements meet WCAG 2.1 AA contrast ratios so users with low vision can perceive them.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section aria-labelledby="problem-heading">
+      <h2 id="problem-heading">Problem</h2>
+      <p>About 285 million people worldwide live with low vision (World Health Organization). When body text falls below a 4.5:1 contrast ratio against its background, or non-text UI like focus indicators, icons, and meaningful borders falls below 3:1, those users cannot reliably perceive the interface.</p>
+      <p>The 2024 WebAIM Million audit found that low contrast affected the majority of the most-trafficked websites. Brand palettes routinely fail the threshold without anyone noticing during design.</p>
+    </section>
+
+    <section aria-labelledby="pattern-heading">
+      <h2 id="pattern-heading">Pattern</h2>
+      <p>Audit every color pair <em>in context</em>, not in isolation. The same blue may pass for a heading and fail for body text; the same gray may pass on white and fail on a dark-mode surface.</p>
+      <ul>
+        <li><strong>Body text on background:</strong> &ge; 4.5:1</li>
+        <li><strong>Large text</strong> (&ge;18pt regular OR &ge;14pt bold): &ge; 3:1</li>
+        <li><strong>Non-text UI</strong> (focus rings, icons that convey meaning, form-field borders, button outlines): &ge; 3:1</li>
+        <li><strong>Decorative elements</strong> (logos, disabled states, decorative borders): no minimum, but state communication needs another non-color cue</li>
+      </ul>
+      <p>Resolve failures by adjusting one of the two colors in the failing pair, preferring an existing token in the design-system palette before introducing a net-new color. Disabled states are exempt from the contrast minimum, but if disabled appearance is the only signal that a control is unavailable, it must be disambiguated by another cue (icon, label, position).</p>
+    </section>
+
+    <section aria-labelledby="examples-heading">
+      <h2 id="examples-heading">Visual examples</h2>
+      <div class="demo-row">
+        <div class="demo-tile demo-fail">
+          <span class="demo-label">Fails AA</span>
+          <button type="button" class="btn-demo btn-fail" aria-label="Submit, demonstration of failing color contrast" tabindex="-1">Submit</button>
+          <span class="demo-ratio">2.5:1, white on <code>#FF7A7A</code></span>
+        </div>
+        <div class="demo-tile demo-pass">
+          <span class="demo-label">Passes AAA</span>
+          <button type="button" class="btn-demo btn-pass" aria-label="Submit, demonstration of passing color contrast" tabindex="-1">Submit</button>
+          <span class="demo-ratio">7.6:1, white on <code>#1351A6</code></span>
+        </div>
+      </div>
+      <p>Both buttons are otherwise identical: same text, same shape, same padding. Only the background color changes. The first pair would not be perceivable to many users with low vision; the second is comfortably above the AAA threshold for body text.</p>
+      <figure class="example-figure">
+        <img src="assets/audit-panel-1.png" alt="An in-design color-contrast audit panel listing color pairs in the file with their measured ratios, flagging failing combinations against WCAG 2.1 AA.">
+        <figcaption>Inline audit: every color pair in the file is checked in context, with failing combinations flagged and the measured ratio shown alongside.</figcaption>
+      </figure>
+      <figure class="example-figure">
+        <img src="assets/audit-panel-2.png" alt="The audit panel&rsquo;s suggestion view, surfacing accessible alternatives drawn from the existing design-system palette to resolve a failing pair.">
+        <figcaption>Suggestion view: alternatives are drawn from the existing palette before introducing a net-new color, keeping the brand intact while passing the threshold.</figcaption>
+      </figure>
+    </section>
+
+    <section aria-labelledby="code-heading">
+      <h2 id="code-heading">Code</h2>
+      <p>Express contrast as part of the design-token layer, not as a one-off color value. That makes the audit re-runnable when the palette changes.</p>
+      <pre><code>&lt;!-- HTML --&gt;
+&lt;button class="btn btn--primary"&gt;Submit&lt;/button&gt;</code></pre>
+      <pre><code>/* CSS */
+:root {
+  /* Brand-primary token, contrast-verified against --color-surface */
+  --color-primary-700: #1351A6; /* 7.6:1 on #FFFFFF, passes AAA */
+  --color-on-primary:  #FFFFFF;
+  --color-surface:     #FFFFFF;
+}
+
+.btn {
+  font: 1rem/1.4 "Public Sans", system-ui, sans-serif;
+  padding: 0.625rem 1.25rem;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn--primary {
+  background: var(--color-primary-700);
+  color:      var(--color-on-primary);
+}
+
+.btn--primary:focus-visible {
+  /* 3:1 minimum against the page surface for non-text indicators */
+  outline: 2px solid var(--color-primary-700);
+  outline-offset: 2px;
+}</code></pre>
+    </section>
+
+    <section aria-labelledby="annotation-heading">
+      <h2 id="annotation-heading">Annotation</h2>
+      <p>On a design file, annotate any failing pair with both the measured ratio and the corrected token, in this format:</p>
+      <pre><code>Contrast: 2.5:1 ✗  →  7.6:1 ✓
+Token:    --color-primary-700 (#1351A6) on --color-surface</code></pre>
+      <p>This gives the engineer two pieces of information for free: the failure they are inheriting from the design (so they can verify against the same WebAIM checker) and the canonical token to wire up. Avoid annotating raw hex values without the token name. Values drift, tokens stabilize.</p>
+    </section>
+
+    <section aria-labelledby="wcag-heading">
+      <h2 id="wcag-heading">WCAG mapping</h2>
+      <ul class="criteria-list">
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html" target="_blank" rel="noopener noreferrer">1.4.3 Contrast (Minimum)<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">AA</span>
+         4.5:1 body text, 3:1 large text
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/contrast-enhanced.html" target="_blank" rel="noopener noreferrer">1.4.6 Contrast (Enhanced)<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">AAA</span>
+         7:1 body text, 4.5:1 large text
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/non-text-contrast.html" target="_blank" rel="noopener noreferrer">1.4.11 Non-text Contrast<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">AA</span>
+         3:1 for UI components and graphical objects
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="related-heading">
+      <h2 id="related-heading">Related patterns</h2>
+      <ul>
+        <li>Inclusive imagery (#04), image content that doesn&rsquo;t depend on color alone to communicate state</li>
+        <li>Accessibility-mode validation walkthrough (#09), verifies contrast survives in keyboard + screen-reader context</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="reading-heading">
+      <h2 id="reading-heading">Further reading</h2>
+      <ul>
+        <li><a href="https://webaim.org/resources/contrastchecker/" target="_blank" rel="noopener noreferrer">WebAIM Contrast Checker<span class="sr-only"> (opens in new tab)</span></a>, the canonical authoring tool; bookmark it</li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/Understanding_WCAG/Perceivable/Color_contrast" target="_blank" rel="noopener noreferrer">MDN: Color contrast<span class="sr-only"> (opens in new tab)</span></a>, deep reference with edge cases</li>
+        <li><a href="https://www.a11yproject.com/posts/what-is-color-contrast/" target="_blank" rel="noopener noreferrer">The A11y Project: What is color contrast?<span class="sr-only"> (opens in new tab)</span></a>, field-level introduction</li>
+        <li><a href="https://webaim.org/projects/million/" target="_blank" rel="noopener noreferrer">WebAIM Million<span class="sr-only"> (opens in new tab)</span></a>, annual audit of the top 1M homepages; useful for grounding the problem at scale</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="../../">&larr; All patterns</a></p>
+    <p>Hub: <a href="https://ykimoh.github.io" target="_blank" rel="noopener noreferrer">ykimoh.github.io<span class="sr-only"> (opens in new tab)</span></a> &middot; Source: <a href="https://github.com/ykimoh/inclusive-cross-platform-patterns" target="_blank" rel="noopener noreferrer">github.com/ykimoh/inclusive-cross-platform-patterns<span class="sr-only"> (opens in new tab)</span></a></p>
+    <p>Last updated: 2026</p>
+  </footer>
+</body>
+</html>

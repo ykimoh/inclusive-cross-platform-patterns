@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alt text annotation, Inclusive Cross-Platform Patterns</title>
+  <meta name="description" content="When to write alt text vs. mark an image decorative; how to write functional alt text for product imagery, icons, and decorative illustration.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <p class="eyebrow">Pattern 08 &middot; Annotate</p>
+    <h1>Alt text annotation</h1>
+    <p class="subhead">Three states for every image, meaningful, decorative, or functional. Match the alt text to purpose, not appearance.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <aside class="draft-banner" role="status">
+      <p><strong>Draft.</strong> Visual examples and copy review pending. Pattern logic and WCAG mapping are scaffolded; ready for Young&rsquo;s pass.</p>
+    </aside>
+
+    <section aria-labelledby="problem-heading">
+      <h2 id="problem-heading">Problem</h2>
+      <p>Images without alt text are invisible to screen-reader users, AT announces &ldquo;[unlabeled graphic]&rdquo; or, worse, the file name read out as URL fragments. But verbose alt text on decorative images (icons next to text labels, brand flourishes) wastes user time on every page, every visit. Both failure modes feel the same to the user: noise.</p>
+      <p>The fix isn&rsquo;t &ldquo;always write alt text.&rdquo; It&rsquo;s deciding which of three roles each image plays and writing alt accordingly.</p>
+    </section>
+
+    <section aria-labelledby="pattern-heading">
+      <h2 id="pattern-heading">Pattern</h2>
+      <p>Three states. Every image gets exactly one.</p>
+      <ol>
+        <li><strong>Meaningful</strong>, the image conveys information not present in surrounding text. Write alt that conveys the same information. <em>Match purpose, not appearance.</em> A graph isn&rsquo;t alt=&ldquo;a line chart with red and blue lines&rdquo;; it&rsquo;s alt=&ldquo;Revenue grew 12% Q1 to Q4 2024.&rdquo;</li>
+        <li><strong>Decorative</strong>, the image adds visual rhythm, brand feel, or pure decoration. Use <code>alt=""</code> (empty, never omitted). AT skips it; sighted users see it; nobody loses.</li>
+        <li><strong>Functional</strong>, the image is itself the actionable element (icon-only button, image-as-link). Alt describes the action, not the icon. A play-shaped triangle on a video button is <code>alt="Play video"</code>, not <code>alt="Triangle pointing right"</code>.</li>
+      </ol>
+      <p>Special cases:</p>
+      <ul>
+        <li><strong>Image with adjacent text label:</strong> typically decorative (the text label carries the meaning). Avoid duplicating it in alt.</li>
+        <li><strong>Logo:</strong> meaningful in the header (alt = company name); decorative when it appears as a flourish elsewhere.</li>
+        <li><strong>Complex image (chart, diagram):</strong> short alt + long description (<code>aria-describedby</code> pointing to a hidden full description, or a visible &ldquo;view data&rdquo; link).</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="examples-heading">
+      <h2 id="examples-heading">Visual examples</h2>
+      <div class="example-stack">
+        <figure class="example-figure">
+          <img src="assets/alttext-1.png" alt="A design frame with images flagged for alt-text annotation, marked with the three states: meaningful, decorative, and functional.">
+          <figcaption>Step 1: every image in the design is flagged and assigned one of three states.</figcaption>
+        </figure>
+        <figure class="example-figure">
+          <img src="assets/alttext-3.png" alt="The annotation tool guiding alt-text drafting for a meaningful image, with a textarea for the description.">
+          <figcaption>Mid-pass: alt text is drafted per image. The tool prompts for purpose, not appearance: what the image conveys, not what it shows.</figcaption>
+        </figure>
+        <figure class="example-figure">
+          <img src="assets/alttext-5.png" alt="The completed annotation with each image&rsquo;s alt text shown next to the image, ready for engineering handoff.">
+          <figcaption>Complete annotation: alt text is attached to each image and reviewable alongside the design.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section aria-labelledby="code-heading">
+      <h2 id="code-heading">Code</h2>
+      <pre><code>&lt;!-- Meaningful: alt conveys the information --&gt;
+&lt;img
+  src="quarterly-revenue.png"
+  alt="Revenue grew 12% Q1 to Q4 2024."
+&gt;
+
+&lt;!-- Decorative: empty alt; never omitted --&gt;
+&lt;img src="brand-flourish.svg" alt=""&gt;
+
+&lt;!-- Functional: alt is the action, not the appearance --&gt;
+&lt;button&gt;
+  &lt;img src="play.svg" alt="Play video"&gt;
+&lt;/button&gt;
+
+&lt;!-- Icon-button alternative: SVG with aria-label on the button --&gt;
+&lt;button aria-label="Play video"&gt;
+  &lt;svg aria-hidden="true" focusable="false"&gt;...&lt;/svg&gt;
+&lt;/button&gt;
+
+&lt;!-- Adjacent text label: image is decorative --&gt;
+&lt;a href="/cart"&gt;
+  &lt;img src="cart.svg" alt=""&gt; Cart
+&lt;/a&gt;
+
+&lt;!-- Complex image: short alt + long description --&gt;
+&lt;img
+  src="org-chart.png"
+  alt="Engineering org chart, 12 teams"
+  aria-describedby="org-chart-desc"
+&gt;
+&lt;p id="org-chart-desc"&gt;
+  Full description: ...
+&lt;/p&gt;</code></pre>
+    </section>
+
+    <section aria-labelledby="annotation-heading">
+      <h2 id="annotation-heading">Annotation</h2>
+      <p>Tag each image slot in the design with its state and either the alt text or the rationale for empty alt.</p>
+      <pre><code>Image: hero photograph
+State: meaningful
+Alt:   "Three customers reviewing the dashboard together"
+
+Image: brand flourish, top-right
+State: decorative
+Alt:   "" (empty)
+
+Image: play icon on video card
+State: functional
+Alt:   "Play video"</code></pre>
+    </section>
+
+    <section aria-labelledby="wcag-heading">
+      <h2 id="wcag-heading">WCAG mapping</h2>
+      <ul class="criteria-list">
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/non-text-content.html" target="_blank" rel="noopener noreferrer">1.1.1 Non-text Content<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+         text alternative for non-text content
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html" target="_blank" rel="noopener noreferrer">4.1.2 Name, Role, Value<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+         functional images need an accessible name
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="related-heading">
+      <h2 id="related-heading">Related patterns</h2>
+      <ul>
+        <li>Inclusive imagery (#04), sourcing the image; alt text is how it&rsquo;s consumed</li>
+        <li>Structure landmarks (#07), image semantics within the surrounding content landmarks</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="reading-heading">
+      <h2 id="reading-heading">Further reading</h2>
+      <ul>
+        <li><a href="https://webaim.org/techniques/alttext/" target="_blank" rel="noopener noreferrer">WebAIM: alt text<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.w3.org/WAI/tutorials/images/decision-tree/" target="_blank" rel="noopener noreferrer">W3C alt text decision tree<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.a11yproject.com/posts/alt-text/" target="_blank" rel="noopener noreferrer">A11y Project: alt text<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#authoring_meaningful_alternate_descriptions" target="_blank" rel="noopener noreferrer">MDN: img alt<span class="sr-only"> (opens in new tab)</span></a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="../../">&larr; All patterns</a></p>
+    <p>Hub: <a href="https://ykimoh.github.io" target="_blank" rel="noopener noreferrer">ykimoh.github.io<span class="sr-only"> (opens in new tab)</span></a> &middot; Source: <a href="https://github.com/ykimoh/inclusive-cross-platform-patterns" target="_blank" rel="noopener noreferrer">github.com/ykimoh/inclusive-cross-platform-patterns<span class="sr-only"> (opens in new tab)</span></a></p>
+    <p>Last updated: 2026</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cross-platform consistency, Inclusive Cross-Platform Patterns</title>
+  <meta name="description" content="How a single accessibility pattern (focus indicator, form label, landmark structure) maps consistently across web, iOS, and Android. Behavior parity first; visual style can diverge.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <p class="eyebrow">Pattern 12 &middot; Cross-cutting</p>
+    <h1>Cross-platform consistency</h1>
+    <p class="subhead">How a single accessibility pattern maps consistently across web, iOS, and Android. Behavior parity first; visual style can diverge by necessity.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <aside class="draft-banner" role="status">
+      <p><strong>Draft.</strong> Visual examples and copy review pending. Pattern logic and WCAG mapping are scaffolded; ready for Young&rsquo;s pass.</p>
+    </aside>
+
+    <section aria-labelledby="problem-heading">
+      <h2 id="problem-heading">Problem</h2>
+      <p>Cross-platform consistency is typically mapped at the visual level &mdash; same brand color, same font, same spacing &mdash; but inconsistency at the accessibility level is where users actually pay the cost. A focus indicator that&rsquo;s a 2px ring on web, a system halo on iOS, and a Material elevation on Android: the user who navigates by keyboard or switch control loses cross-platform muscle memory at every surface boundary.</p>
+      <p>The problem is sharper than aesthetics. The same product can meet WCAG 2.1 on web and ship a custom-rolled iOS modal that traps focus, because the platform-mapping work was treated as visual rather than structural. Accessibility primitives differ across platforms; consistency at the accessibility level is a separate, deliberate exercise.</p>
+    </section>
+
+    <section aria-labelledby="pattern-heading">
+      <h2 id="pattern-heading">Pattern</h2>
+      <p>For each accessibility-relevant component, document three platform mappings explicitly. The visual style can differ; the focus order, label semantics, and announcement order must not.</p>
+
+      <table style="width:100%; max-width: 36rem; margin: 0 0 var(--space-5); border-collapse: collapse; font-size: var(--scale-sm);">
+        <thead>
+          <tr style="border-bottom: 1px solid var(--rule);">
+            <th style="text-align: left; padding: var(--space-2) var(--space-3) var(--space-2) 0;">Pattern</th>
+            <th style="text-align: left; padding: var(--space-2) var(--space-3);">Web</th>
+            <th style="text-align: left; padding: var(--space-2) var(--space-3);">iOS</th>
+            <th style="text-align: left; padding: var(--space-2) 0;">Android</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--rule);">
+            <td style="padding: var(--space-2) var(--space-3) var(--space-2) 0; vertical-align: top;">Focus indicator</td>
+            <td style="padding: var(--space-2) var(--space-3); vertical-align: top;"><code>:focus-visible</code> ring &ge;3:1</td>
+            <td style="padding: var(--space-2) var(--space-3); vertical-align: top;">System accessibility focus halo</td>
+            <td style="padding: var(--space-2) 0; vertical-align: top;">View focus highlight</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--rule);">
+            <td style="padding: var(--space-2) var(--space-3) var(--space-2) 0; vertical-align: top;">Form label</td>
+            <td style="padding: var(--space-2) var(--space-3); vertical-align: top;"><code>&lt;label for&gt;</code> + <code>aria-describedby</code></td>
+            <td style="padding: var(--space-2) var(--space-3); vertical-align: top;"><code>accessibilityLabel</code>, <code>accessibilityHint</code></td>
+            <td style="padding: var(--space-2) 0; vertical-align: top;"><code>contentDescription</code>, <code>labelFor</code></td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--rule);">
+            <td style="padding: var(--space-2) var(--space-3) var(--space-2) 0; vertical-align: top;">Landmark / region</td>
+            <td style="padding: var(--space-2) var(--space-3); vertical-align: top;"><code>&lt;main&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;header&gt;</code></td>
+            <td style="padding: var(--space-2) var(--space-3); vertical-align: top;"><code>.accessibilityElement</code> + <code>.header</code> trait</td>
+            <td style="padding: var(--space-2) 0; vertical-align: top;"><code>AccessibilityRole.HEADER</code></td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--rule);">
+            <td style="padding: var(--space-2) var(--space-3) var(--space-2) 0; vertical-align: top;">Heading order</td>
+            <td style="padding: var(--space-2) var(--space-3); vertical-align: top;"><code>&lt;h1&gt;</code>&ndash;<code>&lt;h6&gt;</code></td>
+            <td style="padding: var(--space-2) var(--space-3); vertical-align: top;"><code>accessibilityTraits = .header</code></td>
+            <td style="padding: var(--space-2) 0; vertical-align: top;"><code>setAccessibilityHeading(true)</code></td>
+          </tr>
+          <tr>
+            <td style="padding: var(--space-2) var(--space-3) var(--space-2) 0; vertical-align: top;">Image alt text</td>
+            <td style="padding: var(--space-2) var(--space-3); vertical-align: top;"><code>alt</code>, <code>alt=""</code> for decorative</td>
+            <td style="padding: var(--space-2) var(--space-3); vertical-align: top;"><code>accessibilityLabel</code>, <code>isAccessibilityElement</code></td>
+            <td style="padding: var(--space-2) 0; vertical-align: top;"><code>contentDescription</code>, <code>null</code> for decorative</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p><strong>Three rules:</strong></p>
+      <ol>
+        <li><strong>Behavior parity first.</strong> Visual style can differ across platforms; focus order, label semantics, and announcement order should not.</li>
+        <li><strong>Use platform-native primitives whenever they exist.</strong> A custom-rolled focus ring on iOS is worse than the system halo for users who have system-level accessibility customizations applied; the same goes for TalkBack on Android.</li>
+        <li><strong>Document the divergence.</strong> When web uses a custom modal and iOS uses the native sheet, the team should know what&rsquo;s different and why &mdash; and verify the accessibility behavior on each.</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="reference-heading">
+      <h2 id="reference-heading">Reference</h2>
+      <p>Young Kim&rsquo;s 2023 MFA thesis (Beyond) is a working example of cross-platform accessibility work at the tool level: the prototype ships as an integrated Figma plugin plus a Desktop app, applying the same field-level patterns &mdash; color contrast, UX copy, gender identity form library, keyboard navigation, structure landmarks, alt text &mdash; to designs that themselves ship across web, iOS, and Android. The split is by where the designer works (audits where they design = Figma; annotations where they document for handoff = standalone), not by where the design ships. The pattern stays stable; the surface adapts.</p>
+      <p>See <a href="https://ykimoh.github.io/beyond-mfa/" target="_blank" rel="noopener noreferrer">Beyond MFA thesis<span class="sr-only"> (opens in new tab)</span></a> for the original prototype.</p>
+    </section>
+
+    <section aria-labelledby="use-heading">
+      <h2 id="use-heading">How to use</h2>
+      <ul>
+        <li><strong>Define mappings early.</strong> Build the platform-mapping table during design-system definition, before component implementations diverge. Retrofitting is harder than starting with the table.</li>
+        <li><strong>Spec by primitive, not by component.</strong> In every component spec, name the three implementations and the chosen accessibility primitive for each. Don&rsquo;t leave it to per-platform engineering judgment.</li>
+        <li><strong>Ask the parity question in review.</strong> &ldquo;Does this focus indicator / label / landmark match the spec across all three platforms?&rdquo; If the answer is &ldquo;we&rsquo;ll check later,&rdquo; it won&rsquo;t happen.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="not-heading">
+      <h2 id="not-heading">What this is not</h2>
+      <ul>
+        <li>Not a mandate for visual sameness. The brand can still feel native on each platform; the parity is at the accessibility-behavior layer.</li>
+        <li>Not a substitute for per-platform testing (#10). A mapping table is necessary but not sufficient &mdash; VoiceOver and TalkBack still need to be run on real builds.</li>
+        <li>Not a one-time exercise. Platform accessibility APIs evolve; revisit the table when the platforms ship significant accessibility updates.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="wcag-heading">
+      <h2 id="wcag-heading">WCAG mapping</h2>
+      <p>WCAG applies on web; iOS and Android map to platform-native equivalents that satisfy the same intent. The mapping table is the bridge.</p>
+      <ul class="criteria-list">
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html" target="_blank" rel="noopener noreferrer">4.1.2 Name, Role, Value<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+          applies on all three platforms; primitives differ
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/focus-visible.html" target="_blank" rel="noopener noreferrer">2.4.7 Focus Visible<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">AA</span>
+          visual style differs across platforms; visibility requirement is the same
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/headings-and-labels.html" target="_blank" rel="noopener noreferrer">2.4.6 Headings and Labels<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">AA</span>
+          same intent across platforms; expressed via different primitives
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.html" target="_blank" rel="noopener noreferrer">1.3.1 Info and Relationships<span class="sr-only"> (opens in new tab)</span></a>
+          <span class="level">A</span>
+          structural meaning conveyed by each platform&rsquo;s accessibility tree
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="related-heading">
+      <h2 id="related-heading">Related patterns</h2>
+      <ul>
+        <li><a href="../color-contrast/">Color contrast (#02)</a>, applies identically across platforms; the only one of these where the primitive is the same everywhere</li>
+        <li><a href="../keyboard-navigation/">Focus order &amp; keyboard navigation (#06)</a>, the focus path users carry from one platform to another</li>
+        <li><a href="../structure-landmarks/">Structure landmarks annotation (#07)</a>, the same structural intent expressed via three different primitive sets</li>
+        <li><a href="../accessibility-mode-validation/">Accessibility-mode validation (#09)</a>, run the same three checks on each platform &mdash; web, iOS, Android &mdash; not just the web build</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="reading-heading">
+      <h2 id="reading-heading">Further reading</h2>
+      <ul>
+        <li><a href="https://www.w3.org/TR/wcag2ict-22/" target="_blank" rel="noopener noreferrer">W3C: WCAG 2.x for non-web ICT (WCAG2ICT)<span class="sr-only"> (opens in new tab)</span></a>, how the web success criteria map to non-web platforms</li>
+        <li><a href="https://www.w3.org/WAI/ARIA/apg/" target="_blank" rel="noopener noreferrer">W3C: WAI-ARIA Authoring Practices<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://developer.apple.com/documentation/uikit/accessibility_for_uikit" target="_blank" rel="noopener noreferrer">Apple: Accessibility for UIKit<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://developer.android.com/guide/topics/ui/accessibility" target="_blank" rel="noopener noreferrer">Android: Accessibility developer guide<span class="sr-only"> (opens in new tab)</span></a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="../../">&larr; All patterns</a></p>
+    <p>Hub: <a href="https://ykimoh.github.io" target="_blank" rel="noopener noreferrer">ykimoh.github.io<span class="sr-only"> (opens in new tab)</span></a> &middot; Source: <a href="https://github.com/ykimoh/inclusive-cross-platform-patterns" target="_blank" rel="noopener noreferrer">github.com/ykimoh/inclusive-cross-platform-patterns<span class="sr-only"> (opens in new tab)</span></a></p>
+    <p>Last updated: 2026</p>
+  </footer>
+</body>
+</html>

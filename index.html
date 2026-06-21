@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inclusive Cross-Platform Patterns</title>
+  <meta name="description" content="A field-facing reference for inclusive cross-platform UX design. Twelve patterns organized by the practitioner journey: empathize, design, annotate, validate.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <h1>Inclusive Cross-Platform Patterns</h1>
+    <p class="subhead">A field-facing reference for designers who practice inclusive cross-platform UX. Twelve patterns across the practitioner journey from empathy to validation.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section aria-labelledby="about-heading">
+      <h2 id="about-heading">About</h2>
+      <p>This library documents twelve patterns for designing inclusive interfaces that work across web, iOS, and Android. Each pattern is a single page with the problem, the pattern, visual examples, a copy-pasteable code snippet, the WCAG 2.1 success criteria it addresses, and a short reading list.</p>
+      <p>Most pattern libraries organize by component type. This one organizes by what the designer is doing in the moment, surfacing barriers, applying audits and inclusive content choices, annotating the design for handoff, validating with assistive technology before engineering picks it up.</p>
+    </section>
+
+    <section aria-labelledby="empathize-heading">
+      <h2 id="empathize-heading">1 &middot; Empathize</h2>
+      <ul class="resource-list">
+        <li>
+          <h3><span class="num">01.</span><a href="patterns/empathy-primer/">Disability-scenario empathy primer</a><span class="status">Draft</span></h3>
+          <p>Practitioner-facing scenario cards that walk through a single task from a user-with-disability perspective, surfacing exactly where the typical UI breaks down.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="design-heading">
+      <h2 id="design-heading">2 &middot; Design</h2>
+      <ul class="resource-list">
+        <li>
+          <h3><span class="num">02.</span><a href="patterns/color-contrast/">Color contrast audit + accessible alternatives</a></h3>
+          <p>Identify failing color pairs against WCAG 2.1 AA (4.5:1 body text, 3:1 large text and non-text), and resolve them within an existing design-system palette.</p>
+        </li>
+        <li>
+          <h3><span class="num">03.</span><a href="patterns/inclusive-ux-copy/">Inclusive UX copy</a><span class="status">Draft</span></h3>
+          <p>Identify exclusive verbs and assumptions in interface copy and provide an inclusive-substitution glossary, e.g. &ldquo;watch this video&rdquo; &rarr; &ldquo;play this video.&rdquo;</p>
+        </li>
+        <li>
+          <h3><span class="num">04.</span><a href="patterns/inclusive-imagery/">Inclusive imagery</a><span class="status">Draft</span></h3>
+          <p>Audit image content for representation across age, gender, ability, race, and culture; provide a checklist for sourcing photography and illustration.</p>
+        </li>
+        <li>
+          <h3><span class="num">05.</span><a href="patterns/inclusive-identity-forms/">Inclusive identity forms</a><span class="status">Draft</span></h3>
+          <p>Form patterns for gender identity, pronoun, and assigned-sex-at-birth fields that support open-ended self-identification rather than binary defaults.</p>
+        </li>
+        <li>
+          <h3><span class="num">11.</span><a href="patterns/adaptive-onboarding/">Adaptive onboarding state</a><span class="status">Draft</span></h3>
+          <p>Onboarding flows that progressively disclose features based on detected state (first-run, screen-reader-detected, <code>prefers-reduced-motion</code>) rather than a fixed wizard.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="annotate-heading">
+      <h2 id="annotate-heading">3 &middot; Annotate</h2>
+      <ul class="resource-list">
+        <li>
+          <h3><span class="num">06.</span><a href="patterns/keyboard-navigation/">Focus order &amp; keyboard navigation annotation</a><span class="status">Draft</span></h3>
+          <p>How to annotate keyboard tab order, focus-trap regions, and skip-link placement on a design file so engineers implement them correctly.</p>
+        </li>
+        <li>
+          <h3><span class="num">07.</span><a href="patterns/structure-landmarks/">Structure landmarks annotation</a><span class="status">Draft</span></h3>
+          <p>How to annotate ARIA landmark regions so screen-reader users can skip-jump through page structure rather than reading top-to-bottom.</p>
+        </li>
+        <li>
+          <h3><span class="num">08.</span><a href="patterns/alt-text/">Alt text annotation</a><span class="status">Draft</span></h3>
+          <p>When to write alt text vs. mark an image decorative; how to write functional alt text for product imagery, icons, and decorative illustration.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="validate-heading">
+      <h2 id="validate-heading">4 &middot; Validate</h2>
+      <ul class="resource-list">
+        <li>
+          <h3><span class="num">09.</span><a href="patterns/accessibility-mode-validation/">Accessibility-mode validation walkthrough</a><span class="status">Draft</span></h3>
+          <p>A repeatable, designer-runnable pre-handoff check: walk the design with keyboard + VoiceOver/NVDA to surface focus traps, missing labels, and broken landmark order.</p>
+        </li>
+        <li>
+          <h3><span class="num">10.</span><a href="patterns/accessibility-testing/">Accessibility testing with people with disabilities</a><span class="status">Draft</span></h3>
+          <p>How to design and run an unmoderated accessibility test session with users of assistive technology: recruitment criteria, task framing, moderation considerations, analysis.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="cross-heading">
+      <h2 id="cross-heading">Cross-cutting</h2>
+      <ul class="resource-list">
+        <li>
+          <h3><span class="num">12.</span><a href="patterns/cross-platform-consistency/">Cross-platform consistency</a><span class="status">Draft</span></h3>
+          <p>How a single pattern (focus indicator, form label, landmark structure) maps consistently across web, iOS, and Android, with notes on where the platforms diverge by necessity.</p>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Maintained by Young Kim. <a href="mailto:yk.kimoh@gmail.com">yk.kimoh@gmail.com</a></p>
+    <p>Hub: <a href="https://ykimoh.github.io" target="_blank" rel="noopener noreferrer">ykimoh.github.io<span class="sr-only"> (opens in new tab)</span></a> &middot; Source: <a href="https://github.com/ykimoh/inclusive-cross-platform-patterns" target="_blank" rel="noopener noreferrer">github.com/ykimoh/inclusive-cross-platform-patterns<span class="sr-only"> (opens in new tab)</span></a></p>
+    <p>Content licensed <a href="LICENSE-CONTENT.md">CC BY 4.0</a>. Code samples licensed <a href="LICENSE-CODE">MIT</a>.</p>
+    <p>Last updated: 2026</p>
+  </footer>
+</body>
+</html>
