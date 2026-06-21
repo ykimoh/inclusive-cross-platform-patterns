@@ -308,40 +308,6 @@ main li { margin: var(--space-2) 0; }
   color: var(--ink-soft);
 }
 
-/* In-development status badge */
-
-.status {
-  display: inline-block;
-  margin-left: var(--space-2);
-  padding: 0.0625em 0.5em;
-  font-family: var(--font-body);
-  font-size: var(--scale-xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  border: 1px solid var(--rule);
-  border-radius: 2px;
-  color: var(--ink-soft);
-  vertical-align: 0.15em;
-}
-
-/* ---------- Draft banner (scaffolded pages, removed when shipping) ---------- */
-
-.draft-banner {
-  margin: 0 0 var(--space-6);
-  padding: var(--space-3) var(--space-4);
-  background: var(--paper-soft);
-  border-left: 3px solid var(--accent);
-  border-radius: 2px;
-  font-family: var(--font-body);
-  font-size: var(--scale-sm);
-  color: var(--ink-soft);
-  max-width: 36rem;
-}
-
-.draft-banner p { margin: 0; }
-.draft-banner strong { color: var(--ink); }
-
 /* ---------- Pattern detail page: eyebrow, summary, breadcrumb ---------- */
 
 .breadcrumb {
